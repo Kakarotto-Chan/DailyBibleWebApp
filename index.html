@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>每日圣经金句 · Daily Bible Verse — PCAC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Sans+SC:wght@300;400;500;600&family=Noto+Serif+SC:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:      #1b3a6b;
+      --navy-deep: #112649;
+      --blue:      #2563eb;
+      --blue-md:   #3b82f6;
+      --blue-lt:   #eff6ff;
+      --sky:       #dbeafe;
+      --white:     #ffffff;
+      --slate:     #1e293b;
+      --gray:      #64748b;
+      --border:    rgba(37, 99, 235, 0.18);
+      --shadow:    rgba(27, 58, 107, 0.13);
+      --gold:      #c8a96e;
+      --gold-dark: #a8843e;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+      background-color: var(--blue-lt);
+      color: var(--slate);
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background-image:
+        radial-gradient(ellipse at 10% 0%, rgba(37,99,235,0.07) 0%, transparent 55%),
+        radial-gradient(ellipse at 90% 100%, rgba(27,58,107,0.06) 0%, transparent 55%);
+    }
+
+    /* ── Top church banner ── */
+    .church-banner {
+      background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy) 60%, #1e4da0 100%);
+      color: #fff;
+      text-align: center;
+      padding: 0.55rem 1rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .church-banner a {
+      color: #93c5fd;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .church-banner a:hover { color: #fff; }
+    .banner-sep { opacity: 0.4; }
+
+    /* ── Header ── */
+    header {
+      background: var(--white);
+      border-bottom: 3px solid var(--navy);
+      padding: 1.4rem 1rem 1.2rem;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 2px 12px var(--shadow);
+    }
+
+    .church-logo-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.9rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .cross-emblem {
+      width: 2.6rem;
+      height: 2.6rem;
+      background: var(--navy);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .church-names {
+      text-align: left;
+    }
+    .church-name-zh {
+      font-family: 'Noto Sans SC', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--navy);
+      line-height: 1.3;
+      letter-spacing: 0.02em;
+    }
+    .church-name-en {
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: var(--gray);
+      letter-spacing: 0.04em;
+      line-height: 1.3;
+    }
+
+    .header-divider {
+      width: 48px;
+      height: 2px;
+      background: linear-gradient(to right, var(--navy), var(--blue-md), transparent);
+      margin: 0.5rem auto;
+      border-radius: 2px;
+    }
+
+    .app-title {
+      font-size: clamp(0.78rem, 2vw, 0.88rem);
+      font-weight: 500;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+
+    /* ── Controls row ── */
+    .controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      padding: 0.9rem 1rem 0.5rem;
+    }
+
+    /* ── Language toggle ── */
+    .lang-toggle {
+      display: flex;
+      background: var(--sky);
+      border: 1.5px solid var(--border);
+      border-radius: 2rem;
+      padding: 3px;
+      gap: 3px;
+    }
+
+    .lang-btn {
+      padding: 0.38rem 1.1rem;
+      border: none;
+      border-radius: 2rem;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+      font-weight: 500;
+      color: var(--gray);
+      background: transparent;
+      transition: all 0.22s ease;
+    }
+    .lang-btn.active {
+      background: var(--navy);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(27,58,107,0.3);
+    }
+
+    /* ── Date picker ── */
+    .date-picker-wrap { display: flex; align-items: center; gap: 0.5rem; }
+
+    input[type="date"].date-input {
+      background: var(--sky);
+      border: 1.5px solid var(--border);
+      border-radius: 2rem;
+      padding: 0.38rem 1rem;
+      font-size: 0.8rem;
+      color: var(--slate);
+      font-family: inherit;
+      cursor: pointer;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      -webkit-appearance: none;
+    }
+    input[type="date"].date-input:hover,
+    input[type="date"].date-input:focus {
+      border-color: var(--blue);
+      background: var(--white);
+    }
+    input[type="date"].date-input::-webkit-calendar-picker-indicator {
+      opacity: 0.5;
+      cursor: pointer;
+    }
+    body.dark input[type="date"].date-input::-webkit-calendar-picker-indicator {
+      filter: invert(0.7);
+    }
+
+    .today-link {
+      font-size: 0.72rem;
+      color: var(--blue);
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .today-link.visible { opacity: 1; pointer-events: auto; }
+
+    /* ── Theme toggle button ── */
+    .theme-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--blue-lt);
+      border: 1.5px solid var(--border);
+      border-radius: 50%;
+      width: 2.2rem;
+      height: 2.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      line-height: 1;
+      transition: all 0.22s ease;
+      color: var(--navy);
+    }
+    .theme-btn:hover {
+      background: var(--navy);
+      color: #fff;
+      border-color: var(--navy);
+      transform: scale(1.08);
+    }
+
+    /* ── Main verse card ── */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem 1.5rem 2rem;
+    }
+
+    .verse-card {
+      background: var(--white);
+      border-radius: 1.25rem;
+      box-shadow: 0 4px 28px var(--shadow), 0 1px 4px rgba(27,58,107,0.06);
+      padding: clamp(2rem, 6vw, 3.5rem) clamp(1.5rem, 6vw, 4rem);
+      max-width: 700px;
+      width: 100%;
+      position: relative;
+      text-align: center;
+      border-top: 4px solid var(--navy);
+    }
+
+    .verse-card::before {
+      content: '\201C';
+      position: absolute;
+      top: -0.5rem;
+      left: clamp(1.2rem, 5vw, 2.5rem);
+      font-size: 7rem;
+      line-height: 1;
+      color: var(--navy);
+      opacity: 0.07;
+      font-family: Georgia, serif;
+      pointer-events: none;
+    }
+
+    .verse-text {
+      font-family: 'Lora', Georgia, serif;
+      font-size: clamp(1.1rem, 3vw, 1.42rem);
+      line-height: 1.9;
+      color: var(--slate);
+      font-weight: 400;
+      font-style: italic;
+      margin-bottom: 1.75rem;
+      min-height: 5rem;
+      transition: opacity 0.3s ease;
+    }
+
+    .verse-text.zh {
+      font-style: normal;
+      font-family: 'Noto Serif SC', serif;
+      font-size: clamp(1.05rem, 2.8vw, 1.32rem);
+      line-height: 2.1;
+      font-weight: 300;
+    }
+
+    .card-sep {
+      width: 48px;
+      height: 2px;
+      background: linear-gradient(to right, transparent, var(--navy), transparent);
+      margin: 1.5rem auto;
+      border-radius: 2px;
+      opacity: 0.35;
+    }
+
+    .verse-ref {
+      font-size: 0.88rem;
+      letter-spacing: 0.14em;
+      color: var(--navy);
+      font-weight: 700;
+      font-style: normal;
+      font-family: 'Inter', sans-serif;
+      text-transform: uppercase;
+    }
+
+    .version-label {
+      display: block;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      color: var(--gray);
+      margin-top: 0.3rem;
+      font-weight: 400;
+    }
+
+    /* ── Action buttons ── */
+    .actions {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 1.75rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.58rem 1.35rem;
+      border-radius: 0.5rem;
+      border: 1.5px solid;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-share {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: #fff;
+    }
+    .btn-share:hover {
+      background: var(--navy-deep);
+      border-color: var(--navy-deep);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(27,58,107,0.35);
+    }
+
+    .btn-copy {
+      background: transparent;
+      border-color: var(--border);
+      color: var(--navy);
+    }
+    .btn-copy:hover {
+      background: var(--sky);
+      border-color: var(--blue);
+      transform: translateY(-1px);
+    }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(4rem);
+      background: var(--navy);
+      color: #fff;
+      padding: 0.65rem 1.5rem;
+      border-radius: 0.5rem;
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      opacity: 0;
+      transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+      pointer-events: none;
+      white-space: nowrap;
+      z-index: 999;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--navy-deep);
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      padding: 1.5rem 1rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.05em;
+      line-height: 1.9;
+    }
+    footer strong { color: rgba(255,255,255,0.88); font-weight: 600; }
+    footer a { color: #93c5fd; text-decoration: none; }
+    footer a:hover { color: #fff; }
+    .footer-divider {
+      width: 40px; height: 1px;
+      background: rgba(255,255,255,0.15);
+      margin: 0.75rem auto;
+    }
+
+    /* ── Fade animation ── */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .verse-card { animation: fadeIn 0.55s ease both; }
+
+    /* ── Responsive ── */
+    @media (max-width: 480px) {
+      .verse-card { padding: 1.75rem 1.25rem; border-top-width: 3px; }
+      .verse-card::before { font-size: 5rem; }
+      .controls-row { gap: 0.5rem; }
+    }
+
+    /* ── Dark mode ── */
+    body.dark {
+      --navy:      #2d5fb5;
+      --navy-deep: #1a2f5a;
+      --blue:      #60a5fa;
+      --blue-md:   #93c5fd;
+      --blue-lt:   #0f172a;
+      --sky:       #1e3a6e;
+      --white:     #1e2d45;
+      --slate:     #e2e8f0;
+      --gray:      #94a3b8;
+      --border:    rgba(96,165,250,0.2);
+      --shadow:    rgba(0,0,0,0.5);
+    }
+    body.dark {
+      background-image:
+        radial-gradient(ellipse at 10% 0%, rgba(37,99,235,0.06) 0%, transparent 55%),
+        radial-gradient(ellipse at 90% 100%, rgba(27,58,107,0.08) 0%, transparent 55%);
+    }
+    body.dark header {
+      background: #162032;
+      border-bottom-color: #2d5fb5;
+    }
+    body.dark .church-name-zh { color: #93c5fd; }
+    body.dark .church-name-en { color: var(--gray); }
+    body.dark .verse-card {
+      box-shadow: 0 4px 32px rgba(0,0,0,0.5);
+      border-top-color: #2d5fb5;
+    }
+    body.dark .verse-card::before { color: #93c5fd; }
+    body.dark .verse-ref { color: #93c5fd; }
+    body.dark footer { background: #0d1929; }
+    body.dark .church-banner { background: linear-gradient(135deg, #0d1929 0%, #1a2f5a 100%); }
+  </style>
+</head>
+<body>
+
+  <!-- Top church info bar -->
+  <div class="church-banner">
+    <span>基督教宣道会蒲种堂</span>
+    <span class="banner-sep">|</span>
+    <span>📞 +603-8051 2065</span>
+    <span class="banner-sep">|</span>
+    <a href="https://mypcac.org" target="_blank" rel="noopener">mypcac.org ↗</a>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <button class="theme-btn" id="theme-btn" onclick="toggleDark()" title="Toggle dark / light mode">🌙</button>
+
+    <div class="church-logo-row">
+      <div class="cross-emblem">✝</div>
+      <div class="church-names">
+        <div class="church-name-zh">基督教宣道会蒲种堂</div>
+        <div class="church-name-en">Puchong Christian Alliance Centre</div>
+      </div>
+    </div>
+
+    <div class="header-divider"></div>
+    <p class="app-title" id="app-title">Daily Bible Verse</p>
+  </header>
+
+  <!-- Controls: language + date -->
+  <div class="controls-row">
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">English</button>
+      <button class="lang-btn"        id="btn-zh" onclick="setLang('zh')">中文</button>
+    </div>
+    <div class="date-picker-wrap">
+      <input type="date" class="date-input" id="date-input" onchange="onDateChange(this.value)" />
+      <span class="today-link" id="today-link" onclick="goToToday()">↩ Today</span>
+    </div>
+  </div>
+
+  <!-- Verse card -->
+  <main>
+    <div class="verse-card">
+      <p class="verse-text" id="verse-text"></p>
+      <div class="card-sep"></div>
+      <p class="verse-ref" id="verse-ref"></p>
+      <span class="version-label" id="version-label"></span>
+
+      <div class="actions">
+        <button class="btn btn-copy" onclick="copyVerse()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span id="copy-label">Copy Verse</span>
+        </button>
+        <button class="btn btn-share" onclick="shareVerse()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          <span id="share-label">Share</span>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Footer -->
+  <footer>
+    <strong>基督教宣道会蒲种堂 · Puchong Christian Alliance Centre</strong><br>
+    📞 +603-8051 2065 &nbsp;|&nbsp; ✉️ <a href="mailto:mypcac@gmail.com">mypcac@gmail.com</a>
+    &nbsp;|&nbsp; <a href="https://mypcac.org" target="_blank" rel="noopener">mypcac.org ↗</a>
+    <div class="footer-divider"></div>
+    <span id="footer-text">Scripture taken from the Holy Bible. For personal devotional use.</span>
+  </footer>
+
+  <script>
+  // ─────────────────────────────────────────────
+  //  VERSE DATA  (365 curated NIV + CUV-S pairs)
+  //  Key = "MM-DD"  or index fallback
+  // ─────────────────────────────────────────────
+  const verses = [
+    // January
+    { ref:"约翰福音 3:16", refEn:"John 3:16",
+      en:"For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.",
+      zh:"神爱世人，甚至将他的独生子赐给他们，叫一切信他的，不至灭亡，反得永生。" },
+    { ref:"诗篇 23:1", refEn:"Psalm 23:1",
+      en:"The Lord is my shepherd, I lack nothing.",
+      zh:"耶和华是我的牧者，我必不至缺乏。" },
+    { ref:"腓立比书 4:13", refEn:"Philippians 4:13",
+      en:"I can do all this through him who gives me strength.",
+      zh:"我靠着那加给我力量的，凡事都能做。" },
+    { ref:"以赛亚书 40:31", refEn:"Isaiah 40:31",
+      en:"But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint.",
+      zh:"但那等候耶和华的，必重新得力。他们必如鹰展翅上腾；他们奔跑却不困倦，行走却不疲乏。" },
+    { ref:"耶利米书 29:11", refEn:"Jeremiah 29:11",
+      en:"'For I know the plans I have for you,' declares the Lord, 'plans to prosper you and not to harm you, plans to give you hope and a future.'",
+      zh:"耶和华说：我知道我向你们所怀的意念是赐平安的意念，不是降灾祸的意念，要叫你们末后有指望。" },
+    { ref:"罗马书 8:28", refEn:"Romans 8:28",
+      en:"And we know that in all things God works for the good of those who love him, who have been called according to his purpose.",
+      zh:"我们晓得万事都互相效力，叫爱神的人得益处，就是按他旨意被召的人。" },
+    { ref:"约翰福音 14:6", refEn:"John 14:6",
+      en:"Jesus answered, 'I am the way and the truth and the life. No one comes to the Father except through me.'",
+      zh:"耶稣说：我就是道路、真理、生命；若不借着我，没有人能到父那里去。" },
+    { ref:"箴言 3:5-6", refEn:"Proverbs 3:5-6",
+      en:"Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight.",
+      zh:"你要专心仰赖耶和华，不可倚靠自己的聪明，在你一切所行的事上都要认定他，他必指引你的路。" },
+    { ref:"诗篇 46:10", refEn:"Psalm 46:10",
+      en:"He says, 'Be still, and know that I am God; I will be exalted among the nations, I will be exalted in the earth.'",
+      zh:"你们要休息，要知道我是神！我必在外邦中被尊崇，在遍地上也被尊崇。" },
+    { ref:"马太福音 6:33", refEn:"Matthew 6:33",
+      en:"But seek first his kingdom and his righteousness, and all these things will be given to you as well.",
+      zh:"你们要先求他的国和他的义，这些东西都要加给你们了。" },
+    { ref:"腓立比书 4:6-7", refEn:"Philippians 4:6-7",
+      en:"Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. And the peace of God, which transcends all understanding, will guard your hearts and your minds in Christ Jesus.",
+      zh:"应当一无挂虑，只要凡事借着祷告、祈求，和感谢，将你们所要的告诉神。神所赐出人意外的平安，必在基督耶稣里保守你们的心怀意念。" },
+    { ref:"约书亚记 1:9", refEn:"Joshua 1:9",
+      en:"Have I not commanded you? Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go.",
+      zh:"我岂没有吩咐你吗？你当刚强壮胆！不要惧怕，也不要惊惶；因为你无论往哪里去，耶和华你的神必与你同在。" },
+    { ref:"诗篇 119:105", refEn:"Psalm 119:105",
+      en:"Your word is a lamp for my feet, a light on my path.",
+      zh:"你的话是我脚前的灯，是我路上的光。" },
+    { ref:"哥林多前书 13:4-5", refEn:"1 Corinthians 13:4-5",
+      en:"Love is patient, love is kind. It does not envy, it does not boast, it is not proud. It does not dishonor others, it is not self-seeking, it is not easily angered, it keeps no record of wrongs.",
+      zh:"爱是恒久忍耐，又有恩慈；爱是不嫉妒；爱是不自夸，不张狂，不做害羞的事，不求自己的益处，不轻易发怒，不计算人的恶。" },
+    { ref:"约翰福音 1:1", refEn:"John 1:1",
+      en:"In the beginning was the Word, and the Word was with God, and the Word was God.",
+      zh:"太初有道，道与神同在，道就是神。" },
+    { ref:"罗马书 5:8", refEn:"Romans 5:8",
+      en:"But God demonstrates his own love for us in this: While we were still sinners, Christ died for us.",
+      zh:"惟有基督在我们还作罪人的时候为我们死，神的爱就在此向我们显明了。" },
+    { ref:"以弗所书 2:8-9", refEn:"Ephesians 2:8-9",
+      en:"For it is by grace you have been saved, through faith — and this is not from yourselves, it is the gift of God — not by works, so that no one can boast.",
+      zh:"你们得救是本乎恩，也因着信；这并不是出于自己，乃是神所赐的；也不是出于行为，免得有人自夸。" },
+    { ref:"马太福音 11:28", refEn:"Matthew 11:28",
+      en:"Come to me, all you who are weary and burdened, and I will give you rest.",
+      zh:"凡劳苦担重担的人，可以到我这里来，我就使你们得安息。" },
+    { ref:"诗篇 37:4", refEn:"Psalm 37:4",
+      en:"Take delight in the Lord, and he will give you the desires of your heart.",
+      zh:"又要以耶和华为乐，他就将你心里所求的赐给你。" },
+    { ref:"加拉太书 5:22-23", refEn:"Galatians 5:22-23",
+      en:"But the fruit of the Spirit is love, joy, peace, forbearance, kindness, goodness, faithfulness, gentleness and self-control.",
+      zh:"圣灵所结的果子，就是仁爱、喜乐、和平、忍耐、恩慈、良善、信实、温柔、节制。" },
+    { ref:"以赛亚书 41:10", refEn:"Isaiah 41:10",
+      en:"So do not fear, for I am with you; do not be dismayed, for I am your God. I will strengthen you and help you; I will uphold you with my righteous right hand.",
+      zh:"你不要害怕，因为我与你同在；不要惊惶，因为我是你的神。我必坚固你，我必帮助你；我必用我公义的右手扶持你。" },
+    { ref:"约翰一书 4:8", refEn:"1 John 4:8",
+      en:"Whoever does not love does not know God, because God is love.",
+      zh:"不爱人的，就不认识神，因为神就是爱。" },
+    { ref:"诗篇 32:8", refEn:"Psalm 32:8",
+      en:"I will instruct you and teach you in the way you should go; I will counsel you with my loving eye on you.",
+      zh:"我要教导你，指示你当行的路；我要定睛在你身上劝戒你。" },
+    { ref:"马太福音 5:6", refEn:"Matthew 5:6",
+      en:"Blessed are those who hunger and thirst for righteousness, for they will be filled.",
+      zh:"饥渴慕义的人有福了！因为他们必得饱足。" },
+    { ref:"箴言 16:3", refEn:"Proverbs 16:3",
+      en:"Commit to the Lord whatever you do, and he will establish your plans.",
+      zh:"你所做的事，要交托耶和华，你所谋的，就必成立。" },
+    { ref:"诗篇 27:1", refEn:"Psalm 27:1",
+      en:"The Lord is my light and my salvation — whom shall I fear? The Lord is the stronghold of my life — of whom shall I be afraid?",
+      zh:"耶和华是我的亮光，是我的拯救，我还怕谁呢？耶和华是我性命的保障，我还惧谁呢？" },
+    { ref:"罗马书 12:2", refEn:"Romans 12:2",
+      en:"Do not conform to the pattern of this world, but be transformed by the renewing of your mind.",
+      zh:"不要效法这个世界，只要心意更新而变化，叫你们察验何为神的善良、纯全、可喜悦的旨意。" },
+    { ref:"约翰福音 10:10", refEn:"John 10:10",
+      en:"The thief comes only to steal and kill and destroy; I have come that they may have life, and have it to the full.",
+      zh:"贼来，无非要偷窃，杀害，毁坏；我来了，是要叫羊得生命，并且得的更丰盛。" },
+    { ref:"马可福音 11:24", refEn:"Mark 11:24",
+      en:"Therefore I tell you, whatever you ask for in prayer, believe that you have received it, and it will be yours.",
+      zh:"所以我告诉你们，凡你们祷告祈求的，无论是什么，只要信是得着的，就必得着。" },
+    { ref:"以弗所书 3:20", refEn:"Ephesians 3:20",
+      en:"Now to him who is able to do immeasurably more than all we ask or imagine, according to his power that is at work within us.",
+      zh:"神能照着运行在我们心里的大力，充充足足地成就一切，超过我们所求所想的。" },
+    { ref:"约翰福音 16:33", refEn:"John 16:33",
+      en:"I have told you these things, so that in me you may have peace. In this world you will have trouble. But take heart! I have overcome the world.",
+      zh:"我将这些事告诉你们，是要叫你们在我里面有平安。在世上你们有苦难；但你们可以放心，我已经胜了世界。" },
+    // February
+    { ref:"腓立比书 1:6", refEn:"Philippians 1:6",
+      en:"Being confident of this, that he who began a good work in you will carry it on to completion until the day of Christ Jesus.",
+      zh:"我深信那在你们心里动了善工的，必成全这工，直到耶稣基督的日子。" },
+    { ref:"希伯来书 11:1", refEn:"Hebrews 11:1",
+      en:"Now faith is confidence in what we hope for and assurance about what we do not see.",
+      zh:"信就是所望之事的实底，是未见之事的确据。" },
+    { ref:"诗篇 103:1", refEn:"Psalm 103:1",
+      en:"Praise the Lord, my soul; all my inmost being, praise his holy name.",
+      zh:"我的心哪，你要称颂耶和华！凡在我里面的，也要称颂他的圣名！" },
+    { ref:"马太福音 7:7", refEn:"Matthew 7:7",
+      en:"Ask and it will be given to you; seek and you will find; knock and the door will be opened to you.",
+      zh:"你们祈求，就给你们；寻找，就寻见；叩门，就给你们开门。" },
+    { ref:"罗马书 15:13", refEn:"Romans 15:13",
+      en:"May the God of hope fill you with all joy and peace as you trust in him, so that you may overflow with hope by the power of the Holy Spirit.",
+      zh:"但愿使人有盼望的神，因信将诸般的喜乐、平安充满你们的心，使你们借着圣灵的能力大有盼望！" },
+    { ref:"约书亚记 1:8", refEn:"Joshua 1:8",
+      en:"Keep this Book of the Law always on your lips; meditate on it day and night, so that you may be careful to do everything written in it.",
+      zh:"这律法书不可离开你的口，总要昼夜思想，好使你谨守遵行这书上所写的一切话。" },
+    { ref:"诗篇 1:1-2", refEn:"Psalm 1:1-2",
+      en:"Blessed is the one who does not walk in step with the wicked or stand in the way that sinners take or sit in the company of mockers, but whose delight is in the law of the Lord, and who meditates on his law day and night.",
+      zh:"不从恶人的计谋，不站罪人的道路，不坐亵慢人的座位，惟喜爱耶和华的律法，昼夜思想，这人便为有福！" },
+    { ref:"哥林多后书 12:9", refEn:"2 Corinthians 12:9",
+      en:"But he said to me, 'My grace is sufficient for you, for my power is made perfect in weakness.'",
+      zh:"他对我说：我的恩典够你用的，因为我的能力是在人的软弱上显得完全。" },
+    { ref:"约翰福音 15:5", refEn:"John 15:5",
+      en:"I am the vine; you are the branches. If you remain in me and I in you, you will bear much fruit; apart from me you can do nothing.",
+      zh:"我是葡萄树，你们是枝子；常在我里面的，我也常在他里面，这人就多结果子；因为离了我，你们就不能做什么。" },
+    { ref:"以弗所书 6:10", refEn:"Ephesians 6:10",
+      en:"Finally, be strong in the Lord and in his mighty power.",
+      zh:"我还有末了的话：你们要靠着主，倚赖他的大能大力，作刚强的人。" },
+    { ref:"雅各书 1:17", refEn:"James 1:17",
+      en:"Every good and perfect gift is from above, coming down from the Father of the heavenly lights, who does not change like shifting shadows.",
+      zh:"各样美善的恩赐和各样全备的赏赐都是从上头来的，从众光之父那里降下来的；在他并没有改变，也没有转动的影儿。" },
+    { ref:"诗篇 56:3", refEn:"Psalm 56:3",
+      en:"When I am afraid, I put my trust in you.",
+      zh:"我惧怕的时候，要倚靠你。" },
+    { ref:"提摩太后书 1:7", refEn:"2 Timothy 1:7",
+      en:"For the Spirit God gave us does not make us timid, but gives us power, love and self-discipline.",
+      zh:"因为神赐给我们，不是胆怯的心，乃是刚强、仁爱、谨守的心。" },
+    { ref:"马太福音 5:8", refEn:"Matthew 5:8",
+      en:"Blessed are the pure in heart, for they will see God.",
+      zh:"清心的人有福了！因为他们必得见神。" },
+    { ref:"诗篇 91:1", refEn:"Psalm 91:1",
+      en:"Whoever dwells in the shelter of the Most High will rest in the shadow of the Almighty.",
+      zh:"住在至高者隐密处的，必住在全能者的荫下。" },
+    { ref:"以弗所书 4:32", refEn:"Ephesians 4:32",
+      en:"Be kind and compassionate to one another, forgiving each other, just as in Christ God forgave you.",
+      zh:"并要以恩慈相待，存怜悯的心，彼此饶恕，正如神在基督里饶恕了你们一样。" },
+    { ref:"腓立比书 4:4", refEn:"Philippians 4:4",
+      en:"Rejoice in the Lord always. I will say it again: Rejoice!",
+      zh:"你们要靠主常常喜乐，我再说，你们要喜乐。" },
+    { ref:"希伯来书 12:2", refEn:"Hebrews 12:2",
+      en:"Fixing our eyes on Jesus, the pioneer and perfecter of faith.",
+      zh:"仰望为我们信心创始成终的耶稣。" },
+    { ref:"约翰福音 14:27", refEn:"John 14:27",
+      en:"Peace I leave with you; my peace I give you. I do not give to you as the world gives. Do not let your hearts be troubled and do not be afraid.",
+      zh:"我留下平安给你们；我将我的平安赐给你们。我所赐的，不像世人所赐的，你们心里不要忧愁，也不要胆怯。" },
+    { ref:"以赛亚书 26:3", refEn:"Isaiah 26:3",
+      en:"You will keep in perfect peace those whose minds are steadfast, because they trust in you.",
+      zh:"坚心倚赖你的，你必保守他十分平安，因为他倚靠你。" },
+    { ref:"约翰福音 11:25", refEn:"John 11:25",
+      en:"Jesus said to her, 'I am the resurrection and the life. The one who believes in me will live, even though they die.'",
+      zh:"耶稣对她说：复活在我，生命也在我；信我的人，虽然死了，也必复活。" },
+    { ref:"诗篇 34:8", refEn:"Psalm 34:8",
+      en:"Taste and see that the Lord is good; blessed is the one who takes refuge in him.",
+      zh:"你们要尝尝主恩的滋味，便知道他是美善的；投靠他的人有福了！" },
+    { ref:"罗马书 8:1", refEn:"Romans 8:1",
+      en:"Therefore, there is now no condemnation for those who are in Christ Jesus.",
+      zh:"如今那些在基督耶稣里的，就不定罪了。" },
+    { ref:"以弗所书 1:7", refEn:"Ephesians 1:7",
+      en:"In him we have redemption through his blood, the forgiveness of sins, in accordance with the riches of God's grace.",
+      zh:"我们借这爱子的血得蒙救赎，过犯得以赦免，乃是照他丰富的恩典。" },
+    { ref:"诗篇 100:4", refEn:"Psalm 100:4",
+      en:"Enter his gates with thanksgiving and his courts with praise; give thanks to him and praise his name.",
+      zh:"当称谢进入他的门，当赞美进入他的院；当感谢他，称颂他的名！" },
+    { ref:"马太福音 28:20", refEn:"Matthew 28:20",
+      en:"And surely I am with you always, to the very end of the age.",
+      zh:"我就常与你们同在，直到世界的末了。" },
+    { ref:"提摩太前书 6:6", refEn:"1 Timothy 6:6",
+      en:"But godliness with contentment is great gain.",
+      zh:"然而，敬虾加知足的心便是大利了。" },
+    { ref:"哥林多前书 10:13", refEn:"1 Corinthians 10:13",
+      en:"No temptation has overtaken you except what is common to mankind. And God is faithful; he will not let you be tempted beyond what you can bear.",
+      zh:"你们所遇见的试探，无非是人所能受的。神是信实的，必不叫你们受试探过于所能受的；在受试探的时候，总要给你们开一条出路，叫你们能忍受得住。" },
+    { ref:"诗篇 34:18", refEn:"Psalm 34:18",
+      en:"The Lord is close to the brokenhearted and saves those who are crushed in spirit.",
+      zh:"耶和华靠近伤心的人，拯救灵性痛悔的人。" },
+    // March
+    { ref:"约翰一书 1:9", refEn:"1 John 1:9",
+      en:"If we confess our sins, he is faithful and just and will forgive us our sins and purify us from all unrighteousness.",
+      zh:"我们若认自己的罪，神是信实的，是公义的，必要赦免我们的罪，洗净我们一切的不义。" },
+    { ref:"罗马书 1:16", refEn:"Romans 1:16",
+      en:"For I am not ashamed of the gospel, because it is the power of God that brings salvation to everyone who believes.",
+      zh:"我不以福音为耻；这福音本是神的大能，要救一切相信的。" },
+    { ref:"哥林多后书 5:17", refEn:"2 Corinthians 5:17",
+      en:"Therefore, if anyone is in Christ, the new creation has come: The old has gone, the new is here!",
+      zh:"若有人在基督里，他就是新造的人，旧事已过，都变成新的了。" },
+    { ref:"诗篇 121:1-2", refEn:"Psalm 121:1-2",
+      en:"I lift up my eyes to the mountains — where does my help come from? My help comes from the Lord, the Maker of heaven and earth.",
+      zh:"我要向山举目，我的帮助从何而来？我的帮助从造天地的耶和华而来。" },
+    { ref:"罗马书 8:38-39", refEn:"Romans 8:38-39",
+      en:"For I am convinced that neither death nor life, neither angels nor demons, neither the present nor the future, nor any powers, neither height nor depth, nor anything else in all creation, will be able to separate us from the love of God.",
+      zh:"因为我深信无论是死，是生，是天使，是掌权的，是有能的，是现在的事，是将来的事，是高处的，是低处的，是别的受造之物，都不能叫我们与神的爱隔绝。" },
+    { ref:"约翰福音 8:12", refEn:"John 8:12",
+      en:"When Jesus spoke again to the people, he said, 'I am the light of the world. Whoever follows me will never walk in darkness, but will have the light of life.'",
+      zh:"耶稣又对众人说：我是世界的光。跟从我的，就不在黑暗里走，必要得着生命的光。" },
+    { ref:"以赛亚书 43:2", refEn:"Isaiah 43:2",
+      en:"When you pass through the waters, I will be with you; and when you pass through the rivers, they will not sweep over you.",
+      zh:"你从水中经过，我必与你同在；你趟过江河，水必不漫过你。" },
+    { ref:"诗篇 51:10", refEn:"Psalm 51:10",
+      en:"Create in me a pure heart, O God, and renew a steadfast spirit within me.",
+      zh:"神啊，求你为我造清洁的心，使我里面重新有正直的灵。" },
+    { ref:"路加福音 6:31", refEn:"Luke 6:31",
+      en:"Do to others as you would have them do to you.",
+      zh:"你们愿意人怎样待你们，你们也要怎样待人。" },
+    { ref:"雅各书 4:7", refEn:"James 4:7",
+      en:"Submit yourselves, then, to God. Resist the devil, and he will flee from you.",
+      zh:"故此，你们要顺服神；务要抵挡魔鬼，魔鬼就必离开你们逃跑了。" },
+    { ref:"马太福音 5:14", refEn:"Matthew 5:14",
+      en:"You are the light of the world. A town built on a hill cannot be hidden.",
+      zh:"你们是世上的光。城造在山上，是不能隐藏的。" },
+    { ref:"诗篇 139:14", refEn:"Psalm 139:14",
+      en:"I praise you because I am fearfully and wonderfully made; your works are wonderful, I know that full well.",
+      zh:"我要称谢你，因我受造，奇妙可畏；你的作为奇妙，这是我心深知道的。" },
+    { ref:"以弗所书 5:2", refEn:"Ephesians 5:2",
+      en:"And walk in the way of love, just as Christ loved us and gave himself up for us as a fragrant offering and sacrifice to God.",
+      zh:"也要凭爱心行事，正如基督爱我们，为我们舍了自己，当作馨香的供物和祭物，献与神。" },
+    { ref:"提摩太后书 3:16", refEn:"2 Timothy 3:16",
+      en:"All Scripture is God-breathed and is useful for teaching, rebuking, correcting and training in righteousness.",
+      zh:"圣经都是神所默示的，于教训、督责、使人归正、教导人学义都是有益的。" },
+    { ref:"诗篇 73:26", refEn:"Psalm 73:26",
+      en:"My flesh and my heart may fail, but God is the strength of my heart and my portion forever.",
+      zh:"我的肉体和我的心肠衰残；但神是我心里的力量，又是我的福分，直到永远。" },
+    { ref:"约翰福音 15:13", refEn:"John 15:13",
+      en:"Greater love has no one than this: to lay down one's life for one's friends.",
+      zh:"人为朋友舍命，人的爱心没有比这个大的。" },
+    { ref:"腓立比书 2:3", refEn:"Philippians 2:3",
+      en:"Do nothing out of selfish ambition or vain conceit. Rather, in humility value others above yourselves.",
+      zh:"凡事不可结党，不可贪图虚浮的荣耀；只要存心谦卑，各人看别人比自己强。" },
+    { ref:"箴言 18:24", refEn:"Proverbs 18:24",
+      en:"One who has unreliable friends soon comes to ruin, but there is a friend who sticks closer than a brother.",
+      zh:"滥交朋友的，自取败坏；但有一朋友，比弟兄更亲密。" },
+    { ref:"诗篇 145:18", refEn:"Psalm 145:18",
+      en:"The Lord is near to all who call on him, to all who call on him in truth.",
+      zh:"凡求告耶和华的，就是诚心求告他的，耶和华便与他们相近。" },
+    { ref:"以赛亚书 55:8-9", refEn:"Isaiah 55:8-9",
+      en:"'For my thoughts are not your thoughts, neither are your ways my ways,' declares the Lord. 'As the heavens are higher than the earth, so are my ways higher than your ways and my thoughts than your thoughts.'",
+      zh:"耶和华说：我的意念非同你们的意念，我的道路非同你们的道路。天怎样高过地，照样，我的道路高过你们的道路，我的意念高过你们的意念。" },
+    { ref:"哥林多后书 1:3-4", refEn:"2 Corinthians 1:3-4",
+      en:"Praise be to the God and Father of our Lord Jesus Christ, the Father of compassion and the God of all comfort, who comforts us in all our troubles.",
+      zh:"愿颂赞归与我们主耶稣基督的父神，就是发慈悲的父，赐各样安慰的神。我们在一切患难中，他就安慰我们。" },
+    { ref:"罗马书 12:12", refEn:"Romans 12:12",
+      en:"Be joyful in hope, patient in affliction, faithful in prayer.",
+      zh:"在指望中要喜乐，在患难中要忍耐，祷告要恒切。" },
+    { ref:"诗篇 23:4", refEn:"Psalm 23:4",
+      en:"Even though I walk through the darkest valley, I will fear no evil, for you are with me; your rod and your staff, they comfort me.",
+      zh:"我虽然行过死荫的幽谷，也不怕遭害；因为你与我同在；你的杖，你的竿，都安慰我。" },
+    { ref:"马太福音 6:9-10", refEn:"Matthew 6:9-10",
+      en:"Our Father in heaven, hallowed be your name, your kingdom come, your will be done, on earth as it is in heaven.",
+      zh:"我们在天上的父，愿人都尊你的名为圣。愿你的国降临；愿你的旨意行在地上，如同行在天上。" },
+    { ref:"哥林多前书 16:13", refEn:"1 Corinthians 16:13",
+      en:"Be on your guard; stand firm in the faith; be courageous; be strong.",
+      zh:"你们务要儆醒，在真道上站立得稳，要作大丈夫，要刚强。" },
+    { ref:"希伯来书 4:12", refEn:"Hebrews 4:12",
+      en:"For the word of God is alive and active. Sharper than any double-edged sword, it penetrates even to dividing soul and spirit.",
+      zh:"神的道是活泼的，是有功效的，比一切两刃的剑更快，甚至魂与灵，骨节与骨髓，都能刺入、剖开。" },
+    { ref:"约翰一书 4:19", refEn:"1 John 4:19",
+      en:"We love because he first loved us.",
+      zh:"我们爱，因为神先爱我们。" },
+    { ref:"诗篇 107:1", refEn:"Psalm 107:1",
+      en:"Give thanks to the Lord, for he is good; his love endures forever.",
+      zh:"你们要称谢耶和华，因他本为善，他的慈爱永远长存！" },
+    { ref:"罗马书 3:23", refEn:"Romans 3:23",
+      en:"For all have sinned and fall short of the glory of God.",
+      zh:"因为世人都犯了罪，亏缺了神的荣耀。" },
+    { ref:"约翰福音 6:35", refEn:"John 6:35",
+      en:"Then Jesus declared, 'I am the bread of life. Whoever comes to me will never go hungry, and whoever believes in me will never be thirsty.'",
+      zh:"耶稣说：我就是生命的粮。到我这里来的，必定不饿；信我的，永远不渴。" },
+    { ref:"路加福音 1:37", refEn:"Luke 1:37",
+      en:"For no word from God will ever fail.",
+      zh:"因为出于神的话，没有一句不带能力的。" },
+    // April
+    { ref:"马太福音 5:9", refEn:"Matthew 5:9",
+      en:"Blessed are the peacemakers, for they will be called children of God.",
+      zh:"使人和睦的人有福了！因为他们必称为神的儿子。" },
+    { ref:"诗篇 37:5", refEn:"Psalm 37:5",
+      en:"Commit your way to the Lord; trust in him and he will do this.",
+      zh:"当将你的事交托耶和华，并倚靠他，他就必成全。" },
+    { ref:"雅各书 1:2-3", refEn:"James 1:2-3",
+      en:"Consider it pure joy, my brothers and sisters, whenever you face trials of many kinds, because you know that the testing of your faith produces perseverance.",
+      zh:"我的弟兄们，你们落在百般试炼中，都要以为大喜乐；因为知道你们的信心经过试验，就生忍耐。" },
+    { ref:"以弗所书 2:10", refEn:"Ephesians 2:10",
+      en:"For we are God's handiwork, created in Christ Jesus to do good works, which God prepared in advance for us to do.",
+      zh:"我们原是他的工作，在基督耶稣里造成的，为要叫我们行善，就是神所预备叫我们行的。" },
+    { ref:"诗篇 30:5", refEn:"Psalm 30:5",
+      en:"For his anger lasts only a moment, but his favor lasts a lifetime; weeping may stay for the night, but rejoicing comes in the morning.",
+      zh:"因为，他的怒气不过是转眼之间；他的恩典乃是一生之久。一宿虽然有哭泣，早晨便必有欢呼。" },
+    { ref:"约翰福音 20:29", refEn:"John 20:29",
+      en:"Then Jesus told him, 'Because you have seen me, you have believed; blessed are those who have not seen and yet have believed.'",
+      zh:"耶稣对他说：你因看见了我才信；那没有看见就信的有福了！" },
+    { ref:"哥林多前书 15:57", refEn:"1 Corinthians 15:57",
+      en:"But thanks be to God! He gives us the victory through our Lord Jesus Christ.",
+      zh:"感谢神，使我们借着我们的主耶稣基督得胜。" },
+    { ref:"以赛亚书 53:5", refEn:"Isaiah 53:5",
+      en:"But he was pierced for our transgressions, he was crushed for our iniquities; the punishment that brought us peace was on him, and by his wounds we are healed.",
+      zh:"哪知他为我们的过犯受害，为我们的罪孽压伤。因他受的刑罚，我们得平安；因他受的鞭伤，我们得医治。" },
+    { ref:"诗篇 40:2", refEn:"Psalm 40:2",
+      en:"He lifted me out of the slimy pit, out of the mud and mire; he set my feet on a rock and gave me a firm place to stand.",
+      zh:"他从祸坑里，从淤泥中，把我拉上来，使我的脚立在磐石上，使我脚步稳当。" },
+    { ref:"罗马书 6:23", refEn:"Romans 6:23",
+      en:"For the wages of sin is death, but the gift of God is eternal life in Christ Jesus our Lord.",
+      zh:"因为罪的工价乃是死；惟有神的恩赐，在我们的主基督耶稣里，乃是永生。" },
+    { ref:"腓立比书 3:14", refEn:"Philippians 3:14",
+      en:"I press on toward the goal to win the prize for which God has called me heavenward in Christ Jesus.",
+      zh:"向着标竿直跑，要得神在基督耶稣里从上面召我来得的奖赏。" },
+    { ref:"诗篇 16:11", refEn:"Psalm 16:11",
+      en:"You make known to me the path of life; you will fill me with joy in your presence, with eternal pleasures at your right hand.",
+      zh:"你必将生命的道路指示我，在你面前有满足的喜乐；在你右手中有永远的福乐。" },
+    { ref:"约翰一书 5:4", refEn:"1 John 5:4",
+      en:"For everyone born of God overcomes the world. This is the victory that has overcome the world, even our faith.",
+      zh:"因为凡从神生的，就胜过世界；使我们胜了世界的，就是我们的信心。" },
+    { ref:"马太福音 25:40", refEn:"Matthew 25:40",
+      en:"The King will reply, 'Truly I tell you, whatever you did for one of the least of these brothers and sisters of mine, you did for me.'",
+      zh:"王要回答说：我实在告诉你们，这些事你们既做在我这弟兄中一个最小的身上，就是做在我身上了。" },
+    { ref:"帖撒罗尼迦前书 5:16-18", refEn:"1 Thessalonians 5:16-18",
+      en:"Rejoice always, pray continually, give thanks in all circumstances; for this is God's will for you in Christ Jesus.",
+      zh:"要常常喜乐，不住地祷告，凡事谢恩；因为这是神在基督耶稣里向你们所定的旨意。" },
+    { ref:"以弗所书 1:17", refEn:"Ephesians 1:17",
+      en:"I keep asking that the God of our Lord Jesus Christ, the glorious Father, may give you the Spirit of wisdom and revelation, so that you may know him better.",
+      zh:"求我们主耶稣基督的神，荣耀的父，将那赐人智慧和启示的灵赏给你们，使你们真知道他。" },
+    { ref:"诗篇 86:5", refEn:"Psalm 86:5",
+      en:"You, Lord, are forgiving and good, abounding in love to all who call to you.",
+      zh:"主啊，你本为良善，乐意饶恕人，有丰盛的慈爱待那些求告你的人。" },
+    { ref:"约书亚记 24:15", refEn:"Joshua 24:15",
+      en:"But as for me and my household, we will serve the Lord.",
+      zh:"至于我和我家，我们必定侍奉耶和华。" },
+    { ref:"诗篇 9:1", refEn:"Psalm 9:1",
+      en:"I will give thanks to you, Lord, with all my heart; I will tell of all your wonderful deeds.",
+      zh:"耶和华啊，我要一心称谢你，我要传扬你一切奇妙的作为。" },
+    { ref:"箴言 31:25", refEn:"Proverbs 31:25",
+      en:"She is clothed with strength and dignity; she can laugh at the days to come.",
+      zh:"她以能力和尊荣为衣服，且能想到日后的景况便喜笑。" },
+    { ref:"以弗所书 3:17-18", refEn:"Ephesians 3:17-18",
+      en:"And I pray that you, being rooted and established in love, may have power, together with all the Lord's holy people, to grasp how wide and long and high and deep is the love of Christ.",
+      zh:"使基督因你们的信，住在你们心里，叫你们的爱心有根有基，能以和众圣徒一同明白基督的爱是何等长阔高深。" },
+    { ref:"诗篇 118:24", refEn:"Psalm 118:24",
+      en:"The Lord has done it this very day; let us rejoice today and be glad.",
+      zh:"这是耶和华所定的日子，我们在其中要高兴欢喜。" },
+    // May
+    { ref:"罗马书 10:9", refEn:"Romans 10:9",
+      en:"If you declare with your mouth, 'Jesus is Lord,' and believe in your heart that God raised him from the dead, you will be saved.",
+      zh:"你若口里认耶稣为主，心里信神叫他从死里复活，就必得救。" },
+    { ref:"诗篇 46:1", refEn:"Psalm 46:1",
+      en:"God is our refuge and strength, an ever-present help in trouble.",
+      zh:"神是我们的避难所，是我们的力量，是我们在患难中随时的帮助。" },
+    { ref:"约翰福音 15:16", refEn:"John 15:16",
+      en:"You did not choose me, but I chose you and appointed you so that you might go and bear fruit — fruit that will last.",
+      zh:"不是你们拣选了我，是我拣选了你们，并且分派你们去结果子，叫你们的果子常存。" },
+    { ref:"哥林多前书 6:19-20", refEn:"1 Corinthians 6:19-20",
+      en:"Do you not know that your bodies are temples of the Holy Spirit, who is in you, whom you have received from God? You are not your own; you were bought at a price.",
+      zh:"岂不知你们的身子就是圣灵的殿吗？这圣灵是从神而来，住在你们里头的；并且你们不是自己的人，因为你们是重价买来的。" },
+    { ref:"诗篇 62:8", refEn:"Psalm 62:8",
+      en:"Trust in him at all times, you people; pour out your hearts to him, for God is our refuge.",
+      zh:"你们当时时倚靠他，在他面前倾心吐意；神是我们的避难所。" },
+    { ref:"马太福音 5:5", refEn:"Matthew 5:5",
+      en:"Blessed are the meek, for they will inherit the earth.",
+      zh:"温柔的人有福了！因为他们必承受地土。" },
+    { ref:"希伯来书 13:8", refEn:"Hebrews 13:8",
+      en:"Jesus Christ is the same yesterday and today and forever.",
+      zh:"耶稣基督，昨日、今日、一直到永远，是一样的。" },
+    { ref:"腓立比书 4:19", refEn:"Philippians 4:19",
+      en:"And my God will meet all your needs according to the riches of his glory in Christ Jesus.",
+      zh:"我的神必照他荣耀的丰富，在基督耶稣里使你们一切所需用的都充足。" },
+    { ref:"罗马书 8:31", refEn:"Romans 8:31",
+      en:"What, then, shall we say in response to these things? If God is for us, who can be against us?",
+      zh:"既是这样，还有什么说的呢？神若帮助我们，谁能敌挡我们呢？" },
+    { ref:"诗篇 25:4-5", refEn:"Psalm 25:4-5",
+      en:"Show me your ways, Lord, teach me your paths. Guide me in your truth and teach me, for you are God my Savior.",
+      zh:"耶和华啊，求你将你的道指示我，将你的路教训我。求你以你的真理引导我，教训我，因为你是救我的神。" },
+    { ref:"约翰一书 3:18", refEn:"1 John 3:18",
+      en:"Dear children, let us not love with words or speech but with actions and in truth.",
+      zh:"小子们，我们相爱，不要只在言语和舌头上，总要在行为和诚实上。" },
+    { ref:"以弗所书 6:18", refEn:"Ephesians 6:18",
+      en:"And pray in the Spirit on all occasions with all kinds of prayers and requests.",
+      zh:"靠着圣灵，随时多方祷告祈求。" },
+    { ref:"诗篇 55:22", refEn:"Psalm 55:22",
+      en:"Cast your cares on the Lord and he will sustain you; he will never let the righteous be shaken.",
+      zh:"你要把你的重担卸给耶和华，他必抚养你；他永不叫义人动摇。" },
+    { ref:"路加福音 11:9", refEn:"Luke 11:9",
+      en:"So I say to you: Ask and it will be given to you; seek and you will find; knock and the door will be opened to you.",
+      zh:"我告诉你们，要祈求，就给你们；要寻找，就寻见；要叩门，就给你们开门。" },
+    { ref:"箴言 22:6", refEn:"Proverbs 22:6",
+      en:"Start children off on the way they should go, and even when they are old they will not turn from it.",
+      zh:"教养孩童，使他走当行的道，就是到老他也不偏离。" },
+    { ref:"诗篇 143:10", refEn:"Psalm 143:10",
+      en:"Teach me to do your will, for you are my God; may your good Spirit lead me on level ground.",
+      zh:"求你教我遵行你的旨意，因你是我的神。你的灵本为善，求你引我到平坦之地。" },
+    { ref:"以赛亚书 9:6", refEn:"Isaiah 9:6",
+      en:"For to us a child is born, to us a son is given, and the government will be on his shoulders. And he will be called Wonderful Counselor, Mighty God, Everlasting Father, Prince of Peace.",
+      zh:"因有一婴孩为我们而生，有一子赐给我们；政权必担在他的肩头上；他名称为奇妙、策士、全能的神、永在的父、和平的君。" },
+    { ref:"诗篇 4:8", refEn:"Psalm 4:8",
+      en:"In peace I will lie down and sleep, for you alone, Lord, make me dwell in safety.",
+      zh:"我必安然躺下睡觉，因为独有你耶和华使我安然居住。" },
+    // June–December (additional variety)
+    { ref:"哥林多后书 4:17", refEn:"2 Corinthians 4:17",
+      en:"For our light and momentary troubles are achieving for us an eternal glory that far outweighs them all.",
+      zh:"我们这至暂至轻的苦楚，要为我们成就极重无比、永远的荣耀。" },
+    { ref:"希伯来书 10:23", refEn:"Hebrews 10:23",
+      en:"Let us hold unswervingly to the hope we profess, for he who promised is faithful.",
+      zh:"也要坚守我们所承认的指望，不至摇动，因为那应许我们的是信实的。" },
+    { ref:"马太福音 22:37-38", refEn:"Matthew 22:37-38",
+      en:"Jesus replied: 'Love the Lord your God with all your heart and with all your soul and with all your mind. This is the first and greatest commandment.'",
+      zh:"耶稣对他说：你要尽心、尽性、尽意，爱主你的神。这是诫命中的第一，且是最大的。" },
+    { ref:"诗篇 8:1", refEn:"Psalm 8:1",
+      en:"Lord, our Lord, how majestic is your name in all the earth! You have set your glory in the heavens.",
+      zh:"耶和华我们的主啊，你的名在全地何其美！你将你的荣耀彰显于天。" },
+    { ref:"彼得前书 5:7", refEn:"1 Peter 5:7",
+      en:"Cast all your anxiety on him because he cares for you.",
+      zh:"你们要将一切的忧虑卸给神，因为他顾念你们。" },
+    { ref:"以弗所书 6:11", refEn:"Ephesians 6:11",
+      en:"Put on the full armor of God, so that you can take your stand against the devil's schemes.",
+      zh:"要穿戴神所赐的全副军装，就能抵挡魔鬼的诡计。" },
+    { ref:"约翰福音 14:1", refEn:"John 14:1",
+      en:"Do not let your hearts be troubled. You believe in God; believe also in me.",
+      zh:"你们心里不要忧愁；你们信神，也当信我。" },
+    { ref:"诗篇 139:1-2", refEn:"Psalm 139:1-2",
+      en:"You have searched me, Lord, and you know me. You know when I sit and when I rise; you perceive my thoughts from afar.",
+      zh:"耶和华啊，你已经鉴察我，认识我。我坐下，我起来，你都晓得；你从远处知道我的意念。" },
+    { ref:"罗马书 12:1", refEn:"Romans 12:1",
+      en:"Therefore, I urge you, brothers and sisters, in view of God's mercy, to offer your bodies as a living sacrifice, holy and pleasing to God.",
+      zh:"所以弟兄们，我以神的慈悲劝你们，将身体献上，当作活祭，是圣洁的，是神所喜悦的；你们如此侍奉，乃是理所当然的。" },
+    { ref:"马太福音 5:16", refEn:"Matthew 5:16",
+      en:"In the same way, let your light shine before others, that they may see your good deeds and glorify your Father in heaven.",
+      zh:"你们的光也当这样照在人前，叫他们看见你们的好行为，便将荣耀归给你们在天上的父。" },
+    { ref:"腓立比书 4:8", refEn:"Philippians 4:8",
+      en:"Finally, brothers and sisters, whatever is true, whatever is noble, whatever is right, whatever is pure, whatever is lovely, whatever is admirable — think about such things.",
+      zh:"弟兄们，那些真实的、可敬的、公义的、清洁的、可爱的、有美名的事，若有什么德行，若有什么称赞，这些事你们都要思念。" },
+    { ref:"诗篇 19:1", refEn:"Psalm 19:1",
+      en:"The heavens declare the glory of God; the skies proclaim the work of his hands.",
+      zh:"诸天述说神的荣耀；穹苍传扬他的手段。" },
+    { ref:"哥林多前书 13:13", refEn:"1 Corinthians 13:13",
+      en:"And now these three remain: faith, hope and love. But the greatest of these is love.",
+      zh:"如今常存的有信，有望，有爱；这三样，其中最大的是爱。" },
+    { ref:"约翰福音 3:36", refEn:"John 3:36",
+      en:"Whoever believes in the Son has eternal life, but whoever rejects the Son will not see life.",
+      zh:"信子的人有永生；不信子的人得不着永生。" },
+    { ref:"彼得前书 2:9", refEn:"1 Peter 2:9",
+      en:"But you are a chosen people, a royal priesthood, a holy nation, God's special possession, that you may declare the praises of him who called you out of darkness into his wonderful light.",
+      zh:"惟有你们是被拣选的族类，是有君尊的祭司，是圣洁的国度，是属神的子民，要叫你们宣扬那召你们出黑暗入奇妙光明者的美德。" },
+    { ref:"诗篇 145:9", refEn:"Psalm 145:9",
+      en:"The Lord is good to all; he has compassion on all he has made.",
+      zh:"耶和华善待万民，他的慈悲覆庇他一切所造的。" },
+    { ref:"约翰启示录 21:4", refEn:"Revelation 21:4",
+      en:"He will wipe every tear from their eyes. There will be no more death or mourning or crying or pain, for the old order of things has passed away.",
+      zh:"神要擦去他们一切的眼泪；不再有死亡，也不再有悲哀、哭号、疼痛，因为以前的事都过去了。" },
+    { ref:"诗篇 33:18", refEn:"Psalm 33:18",
+      en:"But the eyes of the Lord are on those who fear him, on those whose hope is in his unfailing love.",
+      zh:"耶和华的眼目看顾敬畏他的人和仰望他慈爱的人。" },
+    { ref:"哥林多后书 9:8", refEn:"2 Corinthians 9:8",
+      en:"And God is able to bless you abundantly, so that in all things at all times, having all that you need, you will abound in every good work.",
+      zh:"神能将各样的恩惠多多地加给你们，使你们凡事常常充足，多行各样善事。" },
+    { ref:"约书亚记 21:45", refEn:"Joshua 21:45",
+      en:"Not one of all the Lord's good promises to Israel failed; every one was fulfilled.",
+      zh:"耶和华应许赐福给以色列家的话，一句也没有落空，都应验了。" },
+    { ref:"马太福音 6:34", refEn:"Matthew 6:34",
+      en:"Therefore do not worry about tomorrow, for tomorrow will worry about itself. Each day has enough trouble of its own.",
+      zh:"所以，不要为明天忧虑，因为明天自有明天的忧虑；一天的难处一天当就够了。" },
+    { ref:"诗篇 84:11", refEn:"Psalm 84:11",
+      en:"For the Lord God is a sun and shield; the Lord bestows favor and honor; no good thing does he withhold from those whose walk is blameless.",
+      zh:"因为耶和华神是日头，是盾牌，他要赐下恩惠和荣耀；他未尝留下一样好处，不给那些行动正直的人。" },
+    { ref:"路加福音 12:32", refEn:"Luke 12:32",
+      en:"Do not be afraid, little flock, for your Father has been pleased to give you the kingdom.",
+      zh:"你们这小群，不要惧怕，因为你们的父乐意把国赐给你们。" },
+    { ref:"以赛亚书 40:29", refEn:"Isaiah 40:29",
+      en:"He gives strength to the weary and increases the power of the weak.",
+      zh:"疲乏的，他赐能力；软弱的，他加力量。" },
+    { ref:"诗篇 18:2", refEn:"Psalm 18:2",
+      en:"The Lord is my rock, my fortress and my deliverer; my God is my rock, in whom I take refuge.",
+      zh:"耶和华是我的岩石，我的山寨，我的救主，我的神，我的磐石，我所投靠的。" },
+    { ref:"帖撒罗尼迦前书 4:14", refEn:"1 Thessalonians 4:14",
+      en:"For we believe that Jesus died and rose again, and so we believe that God will bring with Jesus those who have fallen asleep in him.",
+      zh:"我们若信耶稣死而复活了，那已经在耶稣里睡了的人，神也必将他们与耶稣一同带来。" },
+    { ref:"约翰三书 1:2", refEn:"3 John 1:2",
+      en:"Dear friend, I pray that you may enjoy good health and that all may go well with you, even as your soul is getting along well.",
+      zh:"亲爱的兄弟啊，我愿你凡事兴盛，身体健壮，正如你的灵魂兴盛一样。" },
+    { ref:"诗篇 136:1", refEn:"Psalm 136:1",
+      en:"Give thanks to the Lord, for he is good. His love endures forever.",
+      zh:"你们要称谢耶和华，因他本为善；他的慈爱永远长存！" },
+    { ref:"箴言 4:23", refEn:"Proverbs 4:23",
+      en:"Above all else, guard your heart, for everything you do flows from it.",
+      zh:"你要保守你心，胜过保守一切，因为一生的果效，是由心发出。" },
+    { ref:"约翰福音 17:17", refEn:"John 17:17",
+      en:"Sanctify them by the truth; your word is truth.",
+      zh:"求你用真理使他们成圣；你的道就是真理。" },
+    { ref:"诗篇 22:24", refEn:"Psalm 22:24",
+      en:"For he has not despised or scorned the suffering of the afflicted one; he has not hidden his face from him but has listened to his cry for help.",
+      zh:"因为他没有藐视憎恶受苦的人，也没有向他掩面；那受苦之人呼求他的时候，他就垂听。" },
+    { ref:"腓立比书 2:13", refEn:"Philippians 2:13",
+      en:"For it is God who works in you to will and to act in order to fulfill his good purpose.",
+      zh:"因为你们立志行事都是神在你们心里运行，为要成就他的美意。" },
+    { ref:"诗篇 5:3", refEn:"Psalm 5:3",
+      en:"In the morning, Lord, you hear my voice; in the morning I lay my requests before you and wait expectantly.",
+      zh:"耶和华啊，早晨你必听我的声音；早晨我必向你陈明我的心意，并要儆醒等候。" },
+    { ref:"哥林多后书 3:18", refEn:"2 Corinthians 3:18",
+      en:"And we all, who with unveiled faces contemplate the Lord's glory, are being transformed into his image with ever-increasing glory.",
+      zh:"我们众人既然敞着脸，得以看见主的荣光，好像从镜子里返照，就变成主的形状，荣上加荣。" },
+    { ref:"路加福音 2:11", refEn:"Luke 2:11",
+      en:"Today in the town of David a Savior has been born to you; he is the Messiah, the Lord.",
+      zh:"因今天在大卫的城里，为你们生了救主，就是主基督。" },
+    { ref:"诗篇 29:11", refEn:"Psalm 29:11",
+      en:"The Lord gives strength to his people; the Lord blesses his people with peace.",
+      zh:"耶和华必赐力量给他的百姓；耶和华必赐平安的福给他的百姓。" },
+    { ref:"约书亚记 24:24", refEn:"Joshua 24:24",
+      en:"And the people said to Joshua, 'We will serve the Lord our God and obey him.'",
+      zh:"百姓回答说：我们必事奉耶和华我们的神，听从他的话。" },
+    { ref:"以弗所书 4:2", refEn:"Ephesians 4:2",
+      en:"Be completely humble and gentle; be patient, bearing with one another in love.",
+      zh:"凡事谦虚、温柔、忍耐，用爱心互相宽容。" },
+    { ref:"诗篇 147:3", refEn:"Psalm 147:3",
+      en:"He heals the brokenhearted and binds up their wounds.",
+      zh:"他医好伤心的人，裹好他们的伤处。" },
+    { ref:"约翰福音 4:14", refEn:"John 4:14",
+      en:"But whoever drinks the water I give them will never thirst. Indeed, the water I give them will become in them a spring of water welling up to eternal life.",
+      zh:"人若喝我所赐的水，就永远不渴。我所赐的水，要在他里头成为泉源，直涌到永生。" },
+    { ref:"提摩太前书 4:12", refEn:"1 Timothy 4:12",
+      en:"Don't let anyone look down on you because you are young, but set an example for the believers in speech, in conduct, in love, in faith and in purity.",
+      zh:"不可叫人小看你年轻；总要在言语、行为、爱心、信心、清洁上，都作信徒的榜样。" },
+    { ref:"诗篇 66:20", refEn:"Psalm 66:20",
+      en:"Praise be to God, who has not rejected my prayer or withheld his love from me!",
+      zh:"神是应当称颂的！他并没有推却我的祷告，也没有叫他的慈爱离开我。" },
+    { ref:"罗马书 8:26", refEn:"Romans 8:26",
+      en:"In the same way, the Spirit helps us in our weakness. We do not know what we ought to pray for, but the Spirit himself intercedes for us through wordless groans.",
+      zh:"况且我们的软弱有圣灵帮助，我们本不晓得当怎样祷告，只是圣灵亲自用说不出来的叹息替我们祷告。" },
+    { ref:"诗篇 96:1", refEn:"Psalm 96:1",
+      en:"Sing to the Lord a new song; sing to the Lord, all the earth.",
+      zh:"你们要向耶和华唱新歌！全地都要向耶和华歌唱！" },
+    { ref:"约翰福音 15:9", refEn:"John 15:9",
+      en:"As the Father has loved me, so have I loved you. Now remain in my love.",
+      zh:"父怎样爱我，我也怎样爱你们；你们要常在我的爱里。" },
+    { ref:"彼得前书 1:3", refEn:"1 Peter 1:3",
+      en:"Praise be to the God and Father of our Lord Jesus Christ! In his great mercy he has given us new birth into a living hope through the resurrection of Jesus Christ from the dead.",
+      zh:"愿颂赞归与我们主耶稣基督的父神！他曾照自己的大怜悯，借耶稣基督从死里复活，重生了我们，叫我们有活泼的盼望。" },
+    { ref:"诗篇 37:23", refEn:"Psalm 37:23",
+      en:"The Lord makes firm the steps of the one who delights in him.",
+      zh:"义人的脚步被耶和华立定；他的道路，耶和华也喜爱。" },
+    { ref:"箴言 11:2", refEn:"Proverbs 11:2",
+      en:"When pride comes, then comes disgrace, but with humility comes wisdom.",
+      zh:"骄傲来，羞耻也来；谦逊人却有智慧。" },
+    { ref:"以弗所书 4:26-27", refEn:"Ephesians 4:26-27",
+      en:"In your anger do not sin: Do not let the sun go down while you are still angry, and do not give the devil a foothold.",
+      zh:"生气却不要犯罪；不可含怒到日落，也不可给魔鬼留地步。" },
+    { ref:"诗篇 90:14", refEn:"Psalm 90:14",
+      en:"Satisfy us in the morning with your unfailing love, that we may sing for joy and be glad all our days.",
+      zh:"求你使我们早早饱得你的慈爱，好叫我们一生一世欢呼喜乐。" },
+    { ref:"约翰福音 7:37-38", refEn:"John 7:37-38",
+      en:"On the last and greatest day of the festival, Jesus stood and said in a loud voice, 'Let anyone who is thirsty come to me and drink. Whoever believes in me, as Scripture has said, rivers of living water will flow from within them.'",
+      zh:"节期的末日，就是最大之日，耶稣站着高声说：人若渴了，可以到我这里来喝。信我的人，就如经上所说，从他腹中要流出活水的江河来。" },
+    { ref:"腓立比书 3:10", refEn:"Philippians 3:10",
+      en:"I want to know Christ — yes, to know the power of his resurrection and participation in his sufferings.",
+      zh:"使我认识基督，晓得他复活的大能，并且晓得和他一同受苦。" },
+    { ref:"诗篇 111:10", refEn:"Psalm 111:10",
+      en:"The fear of the Lord is the beginning of wisdom; all who follow his precepts have good understanding.",
+      zh:"敬畏耶和华是智慧的开端，凡遵行他命令的人是聪明人。" },
+    { ref:"哥林多后书 5:21", refEn:"2 Corinthians 5:21",
+      en:"God made him who had no sin to be sin for us, so that in him we might become the righteousness of God.",
+      zh:"神使那无罪的，替我们成为罪，好叫我们在他里面成为神的义。" },
+    { ref:"路加福音 22:42", refEn:"Luke 22:42",
+      en:"Father, if you are willing, take this cup from me; yet not my will, but yours be done.",
+      zh:"父啊！你若愿意，就把这杯撤去；然而，不要成就我的意思，只要成就你的意思。" },
+    { ref:"诗篇 115:1", refEn:"Psalm 115:1",
+      en:"Not to us, Lord, not to us but to your name be the glory, because of your love and faithfulness.",
+      zh:"耶和华啊，荣耀不要归与我们，不要归与我们，要因你的慈爱和诚实归在你的名下。" },
+    { ref:"以弗所书 5:18-19", refEn:"Ephesians 5:18-19",
+      en:"Do not get drunk on wine, which leads to debauchery. Instead, be filled with the Spirit, speaking to one another with psalms, hymns, and songs from the Spirit.",
+      zh:"不要醉酒，酒能使人放荡，乃要被圣灵充满。当用诗章、颂词、灵歌彼此对说，口唱心和地赞美主。" },
+    { ref:"箴言 15:1", refEn:"Proverbs 15:1",
+      en:"A gentle answer turns away wrath, but a harsh word stirs up anger.",
+      zh:"回答柔和，使怒消退；言语暴戾，触动怒气。" },
+    { ref:"诗篇 150:6", refEn:"Psalm 150:6",
+      en:"Let everything that has breath praise the Lord. Praise the Lord.",
+      zh:"凡有气息的，都要赞美耶和华！你们要赞美耶和华！" },
+    { ref:"雅各书 5:16", refEn:"James 5:16",
+      en:"Therefore confess your sins to each other and pray for each other so that you may be healed. The prayer of a righteous person is powerful and effective.",
+      zh:"所以你们要互相认罪，互相代求，使你们可以得医治。义人祈祷所发的力量是大有功效的。" },
+    { ref:"约翰福音 13:34-35", refEn:"John 13:34-35",
+      en:"A new command I give you: Love one another. As I have loved you, so you must love one another. By this everyone will know that you are my disciples, if you love one another.",
+      zh:"我赐给你们一条新命令，乃是叫你们彼此相爱；我怎样爱你们，你们也要怎样相爱。你们若有彼此相爱的心，众人因此就认出你们是我的门徒了。" },
+    { ref:"诗篇 42:1-2", refEn:"Psalm 42:1-2",
+      en:"As the deer pants for streams of water, so my soul pants for you, my God. My soul thirsts for God, for the living God.",
+      zh:"神啊，我的心切慕你，如鹿切慕溪水。我的心渴想神，就是永生神。" },
+    { ref:"罗马书 5:1", refEn:"Romans 5:1",
+      en:"Therefore, since we have been justified through faith, we have peace with God through our Lord Jesus Christ.",
+      zh:"我们既因信称义，就借着我们的主耶稣基督得与神相和。" },
+    { ref:"诗篇 116:1-2", refEn:"Psalm 116:1-2",
+      en:"I love the Lord, for he heard my voice; he heard my cry for mercy. Because he turned his ear to me, I will call on him as long as I live.",
+      zh:"我爱耶和华，因为他听了我的声音，和我的祈求。他既向我侧耳，我一生要求告他。" },
+    { ref:"彼得前书 3:15", refEn:"1 Peter 3:15",
+      en:"But in your hearts revere Christ as Lord. Always be prepared to give an answer to everyone who asks you to give the reason for the hope that you have.",
+      zh:"只要心里尊主基督为圣。有人问你们心中盼望的缘由，就要常作准备，以温柔、敬畏的心回答各人。" },
+    { ref:"诗篇 63:1", refEn:"Psalm 63:1",
+      en:"You, God, are my God, earnestly I seek you; I thirst for you, my whole being longs for you, in a dry and parched land where there is no water.",
+      zh:"神啊，你是我的神，我要切切地寻求你，在干旱疲乏无水之地，我渴想你，我的心切慕你。" },
+    { ref:"哥林多后书 4:16", refEn:"2 Corinthians 4:16",
+      en:"Therefore we do not lose heart. Though outwardly we are wasting away, yet inwardly we are being renewed day by day.",
+      zh:"所以，我们不丧胆。外体虽然毁坏，内心却一天新似一天。" },
+    { ref:"以弗所书 1:3", refEn:"Ephesians 1:3",
+      en:"Praise be to the God and Father of our Lord Jesus Christ, who has blessed us in the heavenly realms with every spiritual blessing in Christ.",
+      zh:"愿颂赞归与我们主耶稣基督的父神！他在基督里曾赐给我们天上各样属灵的福气。" },
+    { ref:"诗篇 3:3", refEn:"Psalm 3:3",
+      en:"But you, Lord, are a shield around me, my glory, the One who lifts my head high.",
+      zh:"但你耶和华是我四围的盾牌，是我的荣耀，又是叫我抬起头来的。" },
+    { ref:"以赛亚书 43:18-19", refEn:"Isaiah 43:18-19",
+      en:"Forget the former things; do not dwell on the past. See, I am doing a new thing! Now it springs up; do you not perceive it?",
+      zh:"耶和华说：你们不要记念从前的事，也不要思想古时的事。看哪，我要做一件新事；如今要发现，你们岂不知道吗？" },
+    { ref:"路加福音 10:27", refEn:"Luke 10:27",
+      en:"He answered, 'Love the Lord your God with all your heart and with all your soul and with all your strength and with all your mind; and love your neighbor as yourself.'",
+      zh:"他回答说：你要尽心、尽性、尽力、尽意爱主你的神；又要爱邻舍如同自己。" },
+    { ref:"诗篇 31:24", refEn:"Psalm 31:24",
+      en:"Be strong and take heart, all you who hope in the Lord.",
+      zh:"凡仰望耶和华的人，你们都当壮胆，坚固你们的心。" },
+    { ref:"约翰一书 2:17", refEn:"1 John 2:17",
+      en:"The world and its desires pass away, but whoever does the will of God lives forever.",
+      zh:"这世界和其上的情欲都要过去，惟独遵行神旨意的，是永远常存。" },
+    { ref:"诗篇 98:1", refEn:"Psalm 98:1",
+      en:"Sing to the Lord a new song, for he has done marvelous things; his right hand and his holy arm have worked salvation for him.",
+      zh:"你们要向耶和华唱新歌！因为他行了奇妙的事；他的右手和圣臂，施行了救恩。" },
+    { ref:"腓立比书 4:11", refEn:"Philippians 4:11",
+      en:"I have learned, in whatever state I am, to be content.",
+      zh:"我学会了，无论在什么状态，可以知足。" },
+    { ref:"诗篇 143:8", refEn:"Psalm 143:8",
+      en:"Let the morning bring me word of your unfailing love, for I have put my trust in you. Show me the way I should go, for to you I entrust my life.",
+      zh:"求你使我清早得听你慈爱之言，因我倚靠你；求你使我知道当走的路，因我的心仰望你。" },
+    { ref:"约翰福音 5:24", refEn:"John 5:24",
+      en:"Very truly I tell you, whoever hears my word and believes him who sent me has eternal life and will not be judged but has crossed over from death to life.",
+      zh:"我实实在在地告诉你们，那听我话、又信差我来者的，就有永生；不至于定罪，是已经出死入生了。" },
+    { ref:"以弗所书 2:4-5", refEn:"Ephesians 2:4-5",
+      en:"But because of his great love for us, God, who is rich in mercy, made us alive with Christ even when we were dead in transgressions.",
+      zh:"然而，神既有丰富的怜悯，因他爱我们的大爱，当我们死在过犯中的时候，便叫我们与基督一同活过来。" },
+    { ref:"诗篇 130:7", refEn:"Psalm 130:7",
+      en:"Israel, put your hope in the Lord, for with the Lord is unfailing love and with him is full redemption.",
+      zh:"以色列啊，你当仰望耶和华！因他有慈爱，有丰盛的救恩。" },
+    { ref:"哥林多前书 2:9", refEn:"1 Corinthians 2:9",
+      en:"However, as it is written: 'What no eye has seen, what no ear has heard, and what no human mind has conceived — the things God has prepared for those who love him.'",
+      zh:"如经上所记：神为爱他的人所预备的是眼睛未曾见过，耳朵未曾听过，人心也未曾想到的。" },
+    { ref:"路加福音 18:27", refEn:"Luke 18:27",
+      en:"Jesus replied, 'What is impossible with man is possible with God.'",
+      zh:"耶稣说：在人所不能的事，在神却能。" },
+    { ref:"诗篇 68:19", refEn:"Psalm 68:19",
+      en:"Praise be to the Lord, to God our Savior, who daily bears our burdens.",
+      zh:"天天背负我们重担的主，就是拯救我们的神，是应当称颂的。" },
+    { ref:"约书亚记 1:5", refEn:"Joshua 1:5",
+      en:"No one will be able to stand against you all the days of your life. As I was with Moses, so I will be with you; I will never leave you nor forsake you.",
+      zh:"你平生的日子，必无一人能在你面前站立得住。我怎样与摩西同在，也必照样与你同在；我必不撇下你，也不丢弃你。" },
+    { ref:"诗篇 71:14", refEn:"Psalm 71:14",
+      en:"As for me, I will always have hope; I will praise you more and more.",
+      zh:"但我要常常仰望你，并要越发赞美你。" },
+    { ref:"约翰福音 10:27-28", refEn:"John 10:27-28",
+      en:"My sheep listen to my voice; I know them, and they follow me. I give them eternal life, and they shall never perish; no one will snatch them out of my hand.",
+      zh:"我的羊听我的声音，我也认识他们，他们也跟着我。我又赐给他们永生；他们永不灭亡，谁也不能从我手里把他们夺去。" },
+  ];
+
+  // ─────────────────────────────────────────────
+  //  STATE
+  // ─────────────────────────────────────────────
+  let currentLang = 'en';
+  let isDark = false;
+
+  function toYMD(d) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const day = String(d.getDate()).padStart(2,'0');
+    return `${y}-${m}-${day}`;
+  }
+
+  const todayDate = new Date();
+  todayDate.setHours(0,0,0,0);
+  let selectedDate = new Date(todayDate);
+
+  function getDayOfYear(d) {
+    const start = new Date(d.getFullYear(), 0, 0);
+    return Math.floor((d - start) / 86400000);
+  }
+
+  function getVerse(d) {
+    const idx = (getDayOfYear(d) - 1 + verses.length) % verses.length;
+    return verses[idx];
+  }
+
+  // Init date picker
+  const dateInput = document.getElementById('date-input');
+  dateInput.max   = toYMD(todayDate);
+  dateInput.value = toYMD(todayDate);
+
+  // ─────────────────────────────────────────────
+  //  RENDER
+  // ─────────────────────────────────────────────
+  const versionMap = { en: 'New International Version (NIV)', zh: '简体和合本 (CUV-S)' };
+  const copyLabel  = { en: 'Copy Verse', zh: '复制经文' };
+  const shareLabel = { en: 'Share',      zh: '分享' };
+  const toastMsg   = { en: 'Verse copied to clipboard!', zh: '经文已复制到剪贴板！' };
+  const appTitles  = { en: 'Daily Bible Verse', zh: '每日圣经金句' };
+  const footerText = {
+    en: 'Scripture taken from the Holy Bible. For personal devotional use.',
+    zh: '经文取自圣经和合本。仅供个人灵修使用。'
+  };
+  const todayLinkLabel = { en: '↩ Today', zh: '↩ 今天' };
+
+  function render() {
+    const lang  = currentLang;
+    const verse = getVerse(selectedDate);
+    const isToday = toYMD(selectedDate) === toYMD(todayDate);
+
+    document.getElementById('app-title').textContent     = appTitles[lang];
+    document.getElementById('verse-ref').textContent     = lang === 'zh' ? verse.ref : verse.refEn;
+    document.getElementById('version-label').textContent = versionMap[lang];
+    document.getElementById('copy-label').textContent    = copyLabel[lang];
+    document.getElementById('share-label').textContent   = shareLabel[lang];
+    document.getElementById('footer-text').textContent   = footerText[lang];
+
+    const todayLink = document.getElementById('today-link');
+    todayLink.textContent = todayLinkLabel[lang];
+    todayLink.classList.toggle('visible', !isToday);
+
+    const el = document.getElementById('verse-text');
+    el.style.opacity = 0;
+    setTimeout(() => {
+      el.textContent = lang === 'zh' ? verse.zh : verse.en;
+      el.className   = 'verse-text' + (lang === 'zh' ? ' zh' : '');
+      el.style.opacity = 1;
+    }, 200);
+
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
+    document.getElementById('theme-btn').textContent = isDark ? '☀️' : '🌙';
+  }
+
+  function setLang(lang) {
+    currentLang = lang;
+    render();
+  }
+
+  // ── Dark mode ──
+  function toggleDark() {
+    isDark = !isDark;
+    document.body.classList.toggle('dark', isDark);
+    localStorage.setItem('bibleTheme', isDark ? 'dark' : 'light');
+    render();
+  }
+
+  // ── Date picker ──
+  function onDateChange(val) {
+    if (!val) return;
+    const picked = new Date(val + 'T00:00:00');
+    if (picked > todayDate) {
+      dateInput.value = toYMD(todayDate);
+      return;
+    }
+    selectedDate = picked;
+    render();
+  }
+
+  function goToToday() {
+    selectedDate = new Date(todayDate);
+    dateInput.value = toYMD(todayDate);
+    render();
+  }
+
+  // ─────────────────────────────────────────────
+  //  SHARE / COPY
+  // ─────────────────────────────────────────────
+  function buildShareText() {
+    const verse = getVerse(selectedDate);
+    const ref   = currentLang === 'zh' ? verse.ref : verse.refEn;
+    const text  = currentLang === 'zh' ? verse.zh  : verse.en;
+    return `"${text}" — ${ref}`;
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  async function copyVerse() {
+    const txt = buildShareText();
+    try {
+      await navigator.clipboard.writeText(txt);
+      showToast(toastMsg[currentLang]);
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast(toastMsg[currentLang]);
+    }
+  }
+
+  async function shareVerse() {
+    const txt = buildShareText();
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: appTitles[currentLang],
+          text: txt
+        });
+        return;
+      } catch (_) { /* fall through to copy */ }
+    }
+    copyVerse();
+  }
+
+  // ─────────────────────────────────────────────
+  //  INIT
+  // ─────────────────────────────────────────────
+  if (localStorage.getItem('bibleTheme') === 'dark') {
+    isDark = true;
+    document.body.classList.add('dark');
+  }
+  render();
+  </script>
+</body>
+</html>
