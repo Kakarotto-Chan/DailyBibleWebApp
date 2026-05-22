@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Malaysia Population Growth 1957–2024</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #0a0e1a;
+      --card: #111827;
+      --border: #1f2937;
+      --accent: #f59e0b;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --malay: #ef4444;
+      --chinese: #3b82f6;
+      --indian: #22c55e;
+      --bumiputera: #f97316;
+      --others: #a855f7;
+      --total: #f59e0b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 24px 40px;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, #1e3a5f 0%, var(--bg) 70%);
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .flag-strip {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+    .flag-bar {
+      height: 8px;
+      border-radius: 4px;
+      animation: grow-bar 1.2s ease-out forwards;
+      transform-origin: left;
+    }
+    @keyframes grow-bar {
+      from { transform: scaleX(0); opacity: 0; }
+      to   { transform: scaleX(1); opacity: 1; }
+    }
+    .flag-bar:nth-child(1) { width: 80px; background: #cc0001; animation-delay: 0.1s; }
+    .flag-bar:nth-child(2) { width: 80px; background: #fff;    animation-delay: 0.2s; }
+    .flag-bar:nth-child(3) { width: 80px; background: #cc0001; animation-delay: 0.3s; }
+    .flag-bar:nth-child(4) { width: 80px; background: #fff;    animation-delay: 0.4s; }
+
+    h1 {
+      font-size: clamp(1.6rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #f59e0b, #fde68a, #f59e0b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Controls ── */
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 24px;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    button {
+      background: var(--border);
+      color: var(--text);
+      border: 1px solid #374151;
+      border-radius: 8px;
+      padding: 8px 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    button:hover  { background: #374151; }
+    button.active { background: var(--accent); color: #000; border-color: var(--accent); }
+    button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .speed-label { color: var(--muted); font-size: 0.85rem; }
+    input[type=range] {
+      accent-color: var(--accent);
+      width: 120px;
+    }
+    .year-badge {
+      background: linear-gradient(135deg, #1e3a5f, #2d4a7a);
+      border: 2px solid var(--accent);
+      border-radius: 12px;
+      padding: 6px 18px;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: 2px;
+      min-width: 110px;
+      text-align: center;
+    }
+
+    /* ── Timeline scrubber ── */
+    .timeline-wrap {
+      padding: 16px 24px 8px;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+    }
+    .timeline-track {
+      position: relative;
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      cursor: pointer;
+      margin-bottom: 6px;
+    }
+    .timeline-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), #fde68a);
+      border-radius: 3px;
+      transition: width 0.05s linear;
+      pointer-events: none;
+    }
+    .timeline-thumb {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 16px;
+      height: 16px;
+      background: var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      box-shadow: 0 0 0 3px rgba(245,158,11,0.3);
+    }
+    .timeline-labels {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 0.72rem;
+    }
+
+    /* ── Main grid ── */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      padding: 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    @media (max-width: 900px) {
+      .main-grid { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      animation: fade-up 0.6s ease-out both;
+    }
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .card:nth-child(2) { animation-delay: 0.1s; }
+    .card:nth-child(3) { animation-delay: 0.2s; }
+    .card:nth-child(4) { animation-delay: 0.3s; }
+
+    .card-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .card.full-width { grid-column: 1 / -1; }
+
+    /* ── KPI row ── */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      padding: 0 24px 8px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .kpi {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      animation: fade-up 0.5s ease-out both;
+    }
+    .kpi-value {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--accent);
+      transition: all 0.3s;
+    }
+    .kpi-label { font-size: 0.72rem; color: var(--muted); margin-top: 4px; }
+
+    /* ── Ethnic bars ── */
+    .ethnic-list { display: flex; flex-direction: column; gap: 14px; }
+    .ethnic-item {}
+    .ethnic-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 5px;
+    }
+    .ethnic-name { font-weight: 600; font-size: 0.92rem; }
+    .ethnic-stats { font-size: 0.82rem; color: var(--muted); }
+    .bar-track {
+      height: 10px;
+      background: var(--border);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 5px;
+      transition: width 0.6s cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    /* ── Milestone ribbon ── */
+    .milestone {
+      background: linear-gradient(135deg, #1e3a5f 0%, #1a2540 100%);
+      border: 1px solid #2d4a7a;
+      border-left: 4px solid var(--accent);
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.4s;
+    }
+    .milestone-icon { font-size: 1.4rem; flex-shrink: 0; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      border-top: 1px solid var(--border);
+      margin-top: 20px;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="flag-strip">
+    <div class="flag-bar"></div>
+    <div class="flag-bar"></div>
+    <div class="flag-bar"></div>
+    <div class="flag-bar"></div>
+  </div>
+  <h1>Malaysia Population Growth</h1>
+  <p class="subtitle">1957 Independence &rarr; 2024 &nbsp;|&nbsp; Ethnic Composition Over 67 Years</p>
+</div>
+
+<!-- ── CONTROLS ── -->
+<div class="controls">
+  <button id="btnPlay" class="active">&#9654; Play</button>
+  <button id="btnPause" disabled>&#9646;&#9646; Pause</button>
+  <button id="btnReset">&#8635; Reset</button>
+  <div class="year-badge" id="yearBadge">1957</div>
+  <label class="speed-label">Speed</label>
+  <input type="range" id="speedSlider" min="1" max="10" value="5" />
+</div>
+
+<!-- ── TIMELINE ── -->
+<div class="timeline-wrap">
+  <div class="timeline-track" id="timelineTrack">
+    <div class="timeline-fill" id="timelineFill" style="width:0%"></div>
+    <div class="timeline-thumb" id="timelineThumb" style="left:0%"></div>
+  </div>
+  <div class="timeline-labels">
+    <span>1957</span><span>1967</span><span>1977</span><span>1987</span>
+    <span>1997</span><span>2007</span><span>2017</span><span>2024</span>
+  </div>
+</div>
+
+<!-- ── KPIs ── -->
+<div class="kpi-row">
+  <div class="kpi">
+    <div class="kpi-value" id="kpiTotal">6.3M</div>
+    <div class="kpi-label">Total Population</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-value" id="kpiDensity">19</div>
+    <div class="kpi-label">Persons / km²</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-value" id="kpiGrowth">—</div>
+    <div class="kpi-label">Growth vs 1957</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-value" id="kpiLargest">Malay</div>
+    <div class="kpi-label">Largest Ethnic Group</div>
+  </div>
+</div>
+
+<!-- ── MAIN GRID ── -->
+<div class="main-grid">
+
+  <!-- Total population line chart -->
+  <div class="card full-width">
+    <div class="card-title">Total Population (millions)</div>
+    <canvas id="lineChart" height="90"></canvas>
+  </div>
+
+  <!-- Ethnic stacked bar -->
+  <div class="card">
+    <div class="card-title">Population by Ethnic Group (millions)</div>
+    <canvas id="stackedBar" height="200"></canvas>
+  </div>
+
+  <!-- Ethnic % breakdown -->
+  <div class="card">
+    <div class="card-title">Ethnic Share of Population</div>
+    <div class="ethnic-list" id="ethnicList"></div>
+  </div>
+
+  <!-- Pie chart -->
+  <div class="card">
+    <div class="card-title">Ethnic Composition (pie)</div>
+    <canvas id="pieChart" height="200"></canvas>
+  </div>
+
+  <!-- Milestone card -->
+  <div class="card">
+    <div class="card-title">Historical Milestone</div>
+    <div class="milestone" id="milestoneBox">
+      <span class="milestone-icon">🌟</span>
+      <span id="milestoneText">Malaya gained independence on 31 August 1957.</span>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Data sources: Department of Statistics Malaysia (DOSM), World Bank, UN Population Division.<br/>
+  Population figures include Peninsular Malaysia, Sabah &amp; Sarawak. Bumiputera includes Malays and other indigenous groups.
+</footer>
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────────────────────────────────────
+const AREA_KM2 = 329847;
+
+// Annual data points — census years anchor, inter-census linearly interpolated
+const DATA = [
+  // [year, total(M), bumiputera%, chinese%, indian%, others%]
+  [1957,  6.28,  49.8, 37.1, 11.3,  1.8],
+  [1960,  8.11,  50.5, 36.6, 11.0,  1.9],
+  [1965,  9.24,  51.8, 35.5, 10.8,  1.9],
+  [1970, 10.44,  53.2, 34.3, 10.6,  1.9],
+  [1975, 12.30,  54.7, 33.5, 10.1,  1.7],
+  [1980, 13.76,  56.4, 32.7,  9.3,  1.6],
+  [1985, 15.68,  58.5, 31.2,  8.7,  1.6],
+  [1991, 18.38,  60.6, 29.0,  8.0,  2.4],
+  [1995, 20.69,  62.2, 27.8,  7.7,  2.3],
+  [2000, 23.27,  65.1, 26.0,  7.7,  1.2],
+  [2005, 25.72,  66.1, 25.3,  7.4,  1.2],
+  [2010, 28.33,  67.4, 24.6,  7.3,  0.7],
+  [2015, 30.34,  68.5, 23.4,  7.0,  1.1],
+  [2020, 32.45,  69.6, 22.6,  6.8,  1.0],
+  [2021, 32.58,  69.8, 22.4,  6.7,  1.1],
+  [2022, 32.97,  70.0, 22.2,  6.7,  1.1],
+  [2023, 33.40,  70.1, 22.0,  6.8,  1.1],
+  [2024, 33.91,  70.2, 21.9,  6.8,  1.1],
+];
+
+// Fill every year by interpolating
+function buildYearly(data) {
+  const out = [];
+  for (let i = 0; i < data.length - 1; i++) {
+    const [y0, t0, b0, c0, i0, o0] = data[i];
+    const [y1, t1, b1, c1, i1, o1] = data[i + 1];
+    const steps = y1 - y0;
+    for (let s = 0; s < steps; s++) {
+      const f = s / steps;
+      out.push({
+        year: y0 + s,
+        total: t0 + (t1 - t0) * f,
+        bumi:  b0 + (b1 - b0) * f,
+        chinese: c0 + (c1 - c0) * f,
+        indian:  i0 + (i1 - i0) * f,
+        others:  o0 + (o1 - o0) * f,
+      });
+    }
+  }
+  out.push({ year: 2024, total: 33.91, bumi: 70.2, chinese: 21.9, indian: 6.8, others: 1.1 });
+  return out;
+}
+
+const YEARLY = buildYearly(DATA);
+const YEARS  = YEARLY.map(d => d.year);
+const TOTAL_YEARS = YEARS.length;
+
+// Milestones
+const MILESTONES = [
+  { year: 1957, icon: '🇲🇾', text: 'Malaya gained independence on 31 August 1957 — population 6.3 million.' },
+  { year: 1963, icon: '🤝', text: 'Formation of Malaysia on 16 September 1963, uniting Malaya, Sabah, Sarawak and Singapore.' },
+  { year: 1965, icon: '🗺️', text: 'Singapore separated from Malaysia on 9 August 1965.' },
+  { year: 1970, icon: '📋', text: 'New Economic Policy (NEP) launched after 1969 racial riots — aimed at restructuring ethnic economic imbalances.' },
+  { year: 1980, icon: '🏭', text: 'Rapid industrialisation under Mahathir — population reaches 13.8 million, urbanisation accelerating.' },
+  { year: 1991, icon: '🚀', text: 'Vision 2020 launched — Malaysia targets developed-nation status; population 18.4 million.' },
+  { year: 1997, icon: '💹', text: 'Asian Financial Crisis hits Malaysia — economic contraction but population growth continues.' },
+  { year: 2000, icon: '🌆', text: 'Malaysia crosses 23 million people; Bumiputera share surpasses 65% for the first time.' },
+  { year: 2008, icon: '🏗️', text: 'Greater Kuala Lumpur development; urbanisation rate exceeds 70%.' },
+  { year: 2020, icon: '😷', text: 'COVID-19 pandemic — Malaysia records 32.4 million people; borders closed, migration slows.' },
+  { year: 2024, icon: '🎉', text: 'Malaysia population reaches 33.9 million, with Bumiputera at ~70%, Chinese ~22%, Indian ~7%.' },
+];
+
+function getMilestone(year) {
+  let m = MILESTONES[0];
+  for (const ms of MILESTONES) { if (ms.year <= year) m = ms; }
+  return m;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CHART SETUP
+// ─────────────────────────────────────────────────────────────────────────────
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.borderColor = '#1f2937';
+
+// --- Line chart (total population) ---
+const lineCtx = document.getElementById('lineChart').getContext('2d');
+const lineData = {
+  labels: YEARS,
+  datasets: [{
+    label: 'Total Population (M)',
+    data: YEARLY.map(d => +d.total.toFixed(2)),
+    borderColor: '#f59e0b',
+    backgroundColor: 'rgba(245,158,11,0.08)',
+    borderWidth: 3,
+    pointRadius: 0,
+    pointHoverRadius: 6,
+    fill: true,
+    tension: 0.4,
+  }]
+};
+const lineChart = new Chart(lineCtx, {
+  type: 'line',
+  data: {
+    labels: [],
+    datasets: [{ ...lineData.datasets[0], data: [] }]
+  },
+  options: {
+    responsive: true,
+    animation: { duration: 0 },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => ` ${ctx.parsed.y.toFixed(2)}M`
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: { maxTicksLimit: 12, color: '#64748b' },
+        grid: { color: '#1a2235' }
+      },
+      y: {
+        min: 0,
+        max: 36,
+        ticks: { callback: v => v + 'M', color: '#64748b' },
+        grid: { color: '#1a2235' }
+      }
+    }
+  }
+});
+
+// --- Stacked bar chart ---
+const barCtx = document.getElementById('stackedBar').getContext('2d');
+const barChart = new Chart(barCtx, {
+  type: 'bar',
+  data: {
+    labels: DATA.map(d => d[0]),
+    datasets: [
+      { label: 'Bumiputera', backgroundColor: '#f97316', data: [], stack: 's' },
+      { label: 'Chinese',    backgroundColor: '#3b82f6', data: [], stack: 's' },
+      { label: 'Indian',     backgroundColor: '#22c55e', data: [], stack: 's' },
+      { label: 'Others',     backgroundColor: '#a855f7', data: [], stack: 's' },
+    ]
+  },
+  options: {
+    responsive: true,
+    animation: { duration: 300 },
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: { boxWidth: 12, padding: 14, color: '#94a3b8' }
+      },
+      tooltip: {
+        callbacks: {
+          label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2)}M`
+        }
+      }
+    },
+    scales: {
+      x: {
+        stacked: true,
+        ticks: { color: '#64748b' },
+        grid: { display: false }
+      },
+      y: {
+        stacked: true,
+        max: 36,
+        ticks: { callback: v => v + 'M', color: '#64748b' },
+        grid: { color: '#1a2235' }
+      }
+    }
+  }
+});
+
+// Initialise bar chart with zeros
+DATA.forEach((_, i) => {
+  barChart.data.datasets.forEach(ds => ds.data.push(0));
+});
+
+// --- Pie chart ---
+const pieCtx = document.getElementById('pieChart').getContext('2d');
+const pieChart = new Chart(pieCtx, {
+  type: 'doughnut',
+  data: {
+    labels: ['Bumiputera', 'Chinese', 'Indian', 'Others'],
+    datasets: [{
+      data: [0, 0, 0, 0],
+      backgroundColor: ['#f97316','#3b82f6','#22c55e','#a855f7'],
+      borderColor: '#111827',
+      borderWidth: 3,
+    }]
+  },
+  options: {
+    responsive: true,
+    animation: { duration: 400 },
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: { boxWidth: 12, padding: 14, color: '#94a3b8' }
+      },
+      tooltip: {
+        callbacks: {
+          label: ctx => ` ${ctx.label}: ${ctx.parsed.toFixed(1)}%`
+        }
+      }
+    }
+  }
+});
+
+// --- Ethnic list DOM ---
+const ETHNIC_COLORS = {
+  Bumiputera: '#f97316',
+  Chinese: '#3b82f6',
+  Indian: '#22c55e',
+  Others: '#a855f7'
+};
+const ethnicListEl = document.getElementById('ethnicList');
+['Bumiputera','Chinese','Indian','Others'].forEach(name => {
+  const div = document.createElement('div');
+  div.className = 'ethnic-item';
+  div.id = 'ethnic-' + name;
+  div.innerHTML = `
+    <div class="ethnic-header">
+      <span class="ethnic-name" style="color:${ETHNIC_COLORS[name]}">${name}</span>
+      <span class="ethnic-stats" id="stat-${name}">—</span>
+    </div>
+    <div class="bar-track">
+      <div class="bar-fill" id="bar-${name}" style="background:${ETHNIC_COLORS[name]};width:0%"></div>
+    </div>`;
+  ethnicListEl.appendChild(div);
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ANIMATION STATE
+// ─────────────────────────────────────────────────────────────────────────────
+let currentIdx = 0;
+let animFrame  = null;
+let lastTs     = null;
+let msPerYear  = 400; // default at speed=5
+
+function speedFromSlider() {
+  const v = +document.getElementById('speedSlider').value; // 1..10
+  // map 1→1200ms, 10→60ms
+  return 1260 - v * 120;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// UPDATE FUNCTION
+// ─────────────────────────────────────────────────────────────────────────────
+function updateFrame(idx) {
+  const d = YEARLY[idx];
+  const pct = idx / (TOTAL_YEARS - 1);
+
+  // --- Year badge & timeline ---
+  document.getElementById('yearBadge').textContent = d.year;
+  document.getElementById('timelineFill').style.width  = (pct * 100) + '%';
+  document.getElementById('timelineThumb').style.left  = (pct * 100) + '%';
+
+  // --- KPIs ---
+  document.getElementById('kpiTotal').textContent    = d.total.toFixed(2) + 'M';
+  document.getElementById('kpiDensity').textContent  = Math.round(d.total * 1e6 / AREA_KM2);
+  document.getElementById('kpiGrowth').textContent   = '+' + ((d.total / YEARLY[0].total - 1) * 100).toFixed(0) + '%';
+
+  // largest group
+  const shares = { Bumiputera: d.bumi, Chinese: d.chinese, Indian: d.indian, Others: d.others };
+  const largest = Object.entries(shares).sort((a,b) => b[1]-a[1])[0][0];
+  document.getElementById('kpiLargest').textContent = largest;
+
+  // --- Line chart: reveal data up to idx ---
+  lineChart.data.labels           = YEARS.slice(0, idx + 1);
+  lineChart.data.datasets[0].data = YEARLY.slice(0, idx + 1).map(r => +r.total.toFixed(2));
+  lineChart.update('none');
+
+  // --- Stacked bar: for each census anchor, fill if year >= anchor year ---
+  DATA.forEach((anchor, ai) => {
+    const anchorYear = anchor[0];
+    const anchorRow  = YEARLY.find(r => r.year === anchorYear) || YEARLY[YEARLY.length-1];
+    const visible    = d.year >= anchorYear;
+    barChart.data.datasets[0].data[ai] = visible ? +(anchorRow.total * anchorRow.bumi / 100).toFixed(2) : 0;
+    barChart.data.datasets[1].data[ai] = visible ? +(anchorRow.total * anchorRow.chinese / 100).toFixed(2) : 0;
+    barChart.data.datasets[2].data[ai] = visible ? +(anchorRow.total * anchorRow.indian / 100).toFixed(2) : 0;
+    barChart.data.datasets[3].data[ai] = visible ? +(anchorRow.total * anchorRow.others / 100).toFixed(2) : 0;
+  });
+  barChart.update('none');
+
+  // --- Pie chart ---
+  pieChart.data.datasets[0].data = [d.bumi, d.chinese, d.indian, d.others];
+  pieChart.update();
+
+  // --- Ethnic bars ---
+  const groups = [
+    { name: 'Bumiputera', pct: d.bumi,    pop: d.total * d.bumi / 100 },
+    { name: 'Chinese',    pct: d.chinese,  pop: d.total * d.chinese / 100 },
+    { name: 'Indian',     pct: d.indian,   pop: d.total * d.indian / 100 },
+    { name: 'Others',     pct: d.others,   pop: d.total * d.others / 100 },
+  ];
+  groups.forEach(g => {
+    document.getElementById('bar-' + g.name).style.width = g.pct + '%';
+    document.getElementById('stat-' + g.name).textContent =
+      g.pct.toFixed(1) + '% · ' + g.pop.toFixed(2) + 'M';
+  });
+
+  // --- Milestone ---
+  const ms = getMilestone(d.year);
+  document.getElementById('milestoneIcon').textContent = ms.icon;
+  document.getElementById('milestoneText').textContent = ms.text;
+}
+
+// Patch milestone icon element
+document.querySelector('.milestone-icon').id = 'milestoneIcon';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ANIMATION LOOP
+// ─────────────────────────────────────────────────────────────────────────────
+function tick(ts) {
+  if (!lastTs) lastTs = ts;
+  const elapsed = ts - lastTs;
+  msPerYear = speedFromSlider();
+
+  if (elapsed >= msPerYear) {
+    lastTs = ts;
+    currentIdx++;
+    if (currentIdx >= TOTAL_YEARS) {
+      currentIdx = TOTAL_YEARS - 1;
+      updateFrame(currentIdx);
+      stopAnimation();
+      return;
+    }
+    updateFrame(currentIdx);
+  }
+  animFrame = requestAnimationFrame(tick);
+}
+
+function startAnimation() {
+  if (animFrame) return;
+  lastTs = null;
+  document.getElementById('btnPlay').disabled  = true;
+  document.getElementById('btnPlay').classList.remove('active');
+  document.getElementById('btnPause').disabled = false;
+  document.getElementById('btnPause').classList.add('active');
+  animFrame = requestAnimationFrame(tick);
+}
+
+function stopAnimation() {
+  if (animFrame) { cancelAnimationFrame(animFrame); animFrame = null; }
+  document.getElementById('btnPlay').disabled  = false;
+  document.getElementById('btnPlay').classList.add('active');
+  document.getElementById('btnPause').disabled = true;
+  document.getElementById('btnPause').classList.remove('active');
+}
+
+function resetAnimation() {
+  stopAnimation();
+  currentIdx = 0;
+  updateFrame(0);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TIMELINE CLICK
+// ─────────────────────────────────────────────────────────────────────────────
+document.getElementById('timelineTrack').addEventListener('click', e => {
+  const rect = e.currentTarget.getBoundingClientRect();
+  const pct  = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+  currentIdx = Math.round(pct * (TOTAL_YEARS - 1));
+  updateFrame(currentIdx);
+  if (animFrame) { lastTs = null; } // reset timing so it doesn't skip
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BUTTONS
+// ─────────────────────────────────────────────────────────────────────────────
+document.getElementById('btnPlay').addEventListener('click', () => {
+  if (currentIdx >= TOTAL_YEARS - 1) resetAnimation();
+  startAnimation();
+});
+document.getElementById('btnPause').addEventListener('click', stopAnimation);
+document.getElementById('btnReset').addEventListener('click', resetAnimation);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────────────────────
+updateFrame(0);
+
+// Auto-play after a brief delay
+setTimeout(startAnimation, 800);
+</script>
+</body>
+</html>
