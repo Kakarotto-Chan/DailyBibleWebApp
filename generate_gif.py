@@ -90,9 +90,8 @@ def get_milestone(year):
     return result
 
 # ── GIF settings ─────────────────────────────────────────────────────────────
-# One frame every 3 years (roughly), so 24 frames total, plus final hold
-FRAME_YEARS = list(range(1957, 2025, 2)) + [2024]  # every 2 years + final
-FRAME_YEARS = sorted(set(FRAME_YEARS))
+# One frame per year — smoother animation
+FRAME_YEARS = list(range(1957, 2025))  # every year, 68 frames total
 
 def row_for_year(year):
     for r in YEARLY:
@@ -284,11 +283,12 @@ for i, fy in enumerate(FRAME_YEARS):
     print(f"  Frame {i+1}/{len(FRAME_YEARS)}  year={fy}", flush=True)
     frames.append(make_frame(fy))
 
-# Hold on the last frame for 3 seconds (fps=2 → 6 repeats)
-for _ in range(5):
+# Hold on the last frame for ~4 seconds
+for _ in range(9):
     frames.append(frames[-1])
 
 OUT = '/home/user/DailyBibleWebApp/malaysia-population-growth.gif'
-imageio.mimsave(OUT, frames, duration=0.5, loop=0)
+# duration=0.45 s/frame → ~0.5s per year → ~30 s total for 68 years
+imageio.mimsave(OUT, frames, duration=0.45, loop=0)
 print(f"\nSaved → {OUT}")
 print(f"File size: {__import__('os').path.getsize(OUT)/1024/1024:.1f} MB")
